@@ -53,13 +53,7 @@ public class Enemy : MonoBehaviour
         agent.speed = patrolSpeed;
 
         CacheGuardPositions();
-        
-        if (guardPosition == null)
-        {
-            guardPosition = GetNearestGuardPosition();
-            if (guardPosition == null)
-                guardPosition = transform;
-        }
+        guardPosition = GetNearestGuardPosition();
         
         LoadPatrolPointsFromGuard();
             
@@ -263,8 +257,6 @@ public class Enemy : MonoBehaviour
         foreach (Collider2D col in colliders)
         {
             Door door = col.GetComponent<Door>();
-            if (door == null)
-                door = col.GetComponentInParent<Door>();
                 
             if (door != null)
             {
@@ -309,8 +301,6 @@ public class Enemy : MonoBehaviour
             if (hits[i].collider == null) continue;
             
             Door door = hits[i].collider.GetComponent<Door>();
-            if (door == null)
-                door = hits[i].collider.GetComponentInParent<Door>();
             
             if (door == null)
             {
@@ -400,27 +390,6 @@ public class Enemy : MonoBehaviour
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, doorDetectionRange);
         
-        if (guardPosition != null)
-        {
-            Gizmos.color = Color.blue;
-            Gizmos.DrawWireSphere(guardPosition.position, guardRadius);
-        }
-        
-        if (isRoaming && patrolPoints != null && patrolPoints.Length > 1)
-        {
-            Gizmos.color = Color.green;
-            for (int i = 0; i < patrolPoints.Length; i++)
-            {
-                if (patrolPoints[i] != null)
-                {
-                    int nextIndex = (i + 1) % patrolPoints.Length;
-                    if (patrolPoints[nextIndex] != null)
-                    {
-                        Gizmos.DrawLine(patrolPoints[i].position, patrolPoints[nextIndex].position);
-                    }
-                }
-            }
-        }
     }
 }
         

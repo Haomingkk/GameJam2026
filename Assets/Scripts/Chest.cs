@@ -33,7 +33,9 @@ namespace GameJam26
 
             if (spriteRenderer)
             {
-                spriteRenderer.enabled = false;
+                Color transparent = spriteRenderer.color;
+                transparent.a = 0.3f;
+                spriteRenderer.color = transparent;
             }
             // Give coins to player
             SendPlayerCoin(coins);
