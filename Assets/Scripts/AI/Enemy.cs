@@ -21,7 +21,6 @@ namespace GameJam26.AI
 
         [Header("Patrol/Guard Area")]
         [SerializeField] Transform guardPosition;
-        [SerializeField] float guardRadius = 5f;
         [SerializeField] bool isRoaming = false;
         [SerializeField] Transform[] patrolPoints;
         [SerializeField] string guardTag = "GuardPosition";
