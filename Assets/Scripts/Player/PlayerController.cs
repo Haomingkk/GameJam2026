@@ -2,6 +2,7 @@ using GameJam26;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -13,12 +14,11 @@ namespace GameJam2026.GamePlay
     {
         public static PlayerController instance { get; private set; }
 
-        public Action OnEnergyUpdate;
-        public Action OnCoinUpdate;
-        public Action OnHealthUpdate;
+        public event Action <float> OnEnergyUpdate;
+        public event Action OnCoinUpdate;
+        public event Action <int> OnHealthUpdate;
 
         public int watchingPlayerNum;
-        private Rigidbody2D _rb2D;
 
         [Header("Player Movement")]
         [SerializeField]private float _walkSpeed = 5.0f;
@@ -45,36 +45,42 @@ namespace GameJam2026.GamePlay
         [Header("Player Sight")]
         [SerializeField] GameObject _normalSight;
         [SerializeField] GameObject _maskDSight;
-
+        [Header("Interactive Range")]
+        [SerializeField] InteractiveRange _interactiveRange;
+        private bool _calculatingNearInteractable = true;
         [Header("Mask Status")]
         [SerializeField] private float _energyComsumeSpeed=0.1f;
         [SerializeField] private float _energyGatheringSpeed = 0.2f;
         [SerializeField] private float _coinMaskDGatherTime = 1.0f;
         private float _coinMaskDGatherTimer;
-        private bool _isGartheringEnergy;
-        
+        private int _isGartheringEnergy;
+
         public MaskState maskState { get; private set; }
 
-        private readonly List<IInteractable> _nearby = new();
-        private IInteractable _currentInteractable;
-        private bool _calculatingNearInteractable=true;
 
         private bool _isPlayerinControl=true;// change with game mode, may change while we have game mode script
         private bool _isAllowToMove=true;
+
+        private Rigidbody2D _rb2D;
+        private Animator _animator;
 
         private Vector2 _moveInput;
 
         private Coroutine _lootCoroutine;
         private Coroutine _damagedCoroutine;
         private Coroutine _knockbackRoutine;
+
         #region Unity Lifecycle
         private void Awake()
         {
-            _rb2D = GetComponent<Rigidbody2D>();
+            
             if (instance != null)
                 Destroy(gameObject);
             else
                 instance = this;
+
+            _rb2D = GetComponent<Rigidbody2D>();
+            _animator = GetComponent<Animator>();
         }
         private void OnEnable()
         {
@@ -93,6 +99,7 @@ namespace GameJam2026.GamePlay
             _HandlePlayerInput();
             _HandleMaskAStates();
             _UpdateMaskEnergy();
+            
         }
         private void FixedUpdate()
         {
@@ -100,41 +107,25 @@ namespace GameJam2026.GamePlay
             _PlayerMovement();
             if (_moveInput != Vector2.zero)
                _UpdateViewDirection(_moveInput);
+               _UpdateFacing(_moveInput);
         }
         #endregion
-        private void OnTriggerEnter2D(Collider2D other)
-        {
-            var interactable = other.GetComponentInParent<IInteractable>();
-            if (interactable == null) return;
-
-            if (!_nearby.Contains(interactable))
-                _nearby.Add(interactable);
-
-            _currentInteractable = _GetClosestInteractable();
-        }
- 
-        private void OnTriggerExit2D(Collider2D other)
-        {
-            var interactable = other.GetComponentInParent<IInteractable>();
-            if (interactable == null) return;
-
-            _nearby.Remove(interactable);
-
-            _currentInteractable = _GetClosestInteractable();
-        }
-        
+       
         public void OnMove(InputValue value)
         {
             //Debug.Log($"Getting input context {value.Get<Vector2>()}, the player in control is {_isPlayerinControl}, the player {_isAllowToMove} to allow move");
             Vector2 input = value.Get<Vector2>();
 
             if (_isPlayerinControl && _isAllowToMove)
-            { _moveInput = input;
+            {     _moveInput = input;
                 if (input.x == 0 && input.y == 0)
-                {  _playerState = PlayerState.Idle; }
+                {  _playerState = PlayerState.Idle;
+                    _animator.SetBool("isWalking", false);
+                }
                 else
                 {
                     _playerState = PlayerState.Move;
+                    _animator.SetBool("isWalking",true);
                 } 
             }
             else
@@ -158,7 +149,15 @@ namespace GameJam2026.GamePlay
         public MaskState GetCurrentMaskState() {
             return maskState;
         }
-
+        public bool GetCalculatingNearInteractable() { 
+          return _calculatingNearInteractable;
+        }
+        public void UpdateGatheringEnergy(int amount) {
+            
+            _isGartheringEnergy += amount;
+            _isGartheringEnergy = Math.Max(0, _isGartheringEnergy);
+            Debug.Log($"Player gathering energy from{_isGartheringEnergy} enemy");
+        }
         private void _InitPlayerStatus() {
             _health = _maxHealth;
             _energy = _maxEnergy;
@@ -188,41 +187,19 @@ namespace GameJam2026.GamePlay
                 {
                     _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed;
                 }
+               
                 //Debug.Log($"Player is moving in {_rb2D.linearVelocity} speed");
             }
             
         }
-        private IInteractable _GetClosestInteractable()
+        private void _UpdateFacing(Vector2 move)
         {
-            if (_calculatingNearInteractable == false) return null;
-            Vector2 p = transform.position;
-
-            float bestDistSq = float.PositiveInfinity;
-            IInteractable best = null;
-
-
-            for (int i = _nearby.Count - 1; i >= 0; i--)
-            {
-                var it = _nearby[i];
-                if (it == null)
-                {
-                    _nearby.RemoveAt(i);
-                    continue;
-                }
-
-                var comp = it as Component;
-                if (comp == null) continue;
-
-                float d = ((Vector2)comp.transform.position - p).sqrMagnitude;
-                if (d < bestDistSq)
-                {
-                    bestDistSq = d;
-                    best = it;
-                }
-            }
-
-            return best;
+            if (move.x > 0.01f)
+                _animator.SetBool("isFacingLeft", false);
+            else if (move.x < -0.01f)
+                _animator.SetBool("isFacingLeft", true);
         }
+         
         private void _StartKnockback(Vector2 direction)
         {
             if (_knockbackRoutine != null)
@@ -236,6 +213,7 @@ namespace GameJam2026.GamePlay
         }
         private void _HandlePlayerInput()
         {
+            if (!_isPlayerinControl || !_isAllowToMove) { return; }
             var kb = Keyboard.current;
             if (kb == null) return;
 
@@ -297,21 +275,21 @@ namespace GameJam2026.GamePlay
             {
                 _energy -= _energyComsumeSpeed * Time.deltaTime;
                 if (_energy <= 0) { _energy = 0;_ToggleMask(maskState); }
-                OnEnergyUpdate?.Invoke();
+                OnEnergyUpdate?.Invoke(_energy/_maxEnergy);
             }
             else  {
-                if (_isGartheringEnergy)
+                if (_isGartheringEnergy!=0)
                 {
-                    _energy = Math.Min(_energy += _energyGatheringSpeed *= Time.deltaTime, _maxEnergy);
+                    _energy = Math.Min(_energy += _energyGatheringSpeed * Time.deltaTime, _maxEnergy);
                     _coinMaskDGatherTimer += Time.deltaTime;
                     if (_coinMaskDGatherTimer >= _coinMaskDGatherTime) {
                         _coinMaskDGatherTimer = 0;
                         _UpdateCoin(1);
                     }
-                    OnEnergyUpdate?.Invoke();
+                    OnEnergyUpdate?.Invoke(_energy/_maxEnergy);
                 }
             }
-            Debug.Log($"Energy is Updating . Player has {_energy} Energy now!");
+            //Debug.Log($"Energy is Updating . Player has {_energy} Energy now!");
         }
         private void _UpdateCoin(int amount) {
             if (amount > 0) {
@@ -323,18 +301,23 @@ namespace GameJam2026.GamePlay
         private void _UpdateHealth(int amount) {
             if (amount < 0) {
                 _health += amount;
+                OnHealthUpdate?.Invoke(_health);
+               
                 if (_health <= 0)
                 {
+                    _animator.SetBool("isDied",true);
+                    _animator.SetTrigger("Damaged");
                     StartCoroutine(_DieRoutine());
                 }
                 else {
                     if (_lootCoroutine != null) { StopCoroutine(_lootCoroutine); }
                     if (_damagedCoroutine != null) { StopCoroutine(_damagedCoroutine); }
+                    _animator.SetTrigger("Damaged");
                     //StartCoroutine(_OnDamaged());
                 }
                
             }
-            OnHealthUpdate?.Invoke();
+            
         }
         private void _SwitchToNormalSight() {
             _normalSight.SetActive(true);
@@ -346,16 +329,18 @@ namespace GameJam2026.GamePlay
         }
 
         private void _TryInteractive() { 
-           if(_currentInteractable==null) return;
-           var comp = (_currentInteractable as Component);
+           if(_interactiveRange.GetInteractable()==null) return;
+           var comp = (_interactiveRange.GetInteractable() as Component);
            if (comp == null) return;
             //if treasure box, startloot
             if (comp.TryGetComponent<Chest>(out var chest))
             {
                 _lootCoroutine=StartCoroutine(_OnLootRountine());
+                _animator.SetTrigger("Interactive");
             }
             else {
-                _currentInteractable?.Interact();
+                _interactiveRange.GetInteractable()?.Interact();
+                _animator.SetTrigger("Interactive");
             }
            
         }
@@ -368,7 +353,7 @@ namespace GameJam2026.GamePlay
             _calculatingNearInteractable = true;
             _playerState = PlayerState.Idle;
             _lootCoroutine = null;
-            _currentInteractable?.Interact();
+            _interactiveRange.GetInteractable()?.Interact();
         }
         private void _InterruptLootCoroutine() {
             if (_lootCoroutine == null) return;
@@ -399,8 +384,10 @@ namespace GameJam2026.GamePlay
         {
             _isAllowToMove = false;      
             _rb2D.linearVelocity = Vector2.zero;
+
             _playerState = PlayerState.TakeDamage;
             _rb2D.AddForce(direction * _knockbackForce, ForceMode2D.Impulse);
+
             Debug.Log($"Player Knock Back!{direction*_knockbackForce}");
             yield return new WaitForSeconds(_knockbackTime);
 
