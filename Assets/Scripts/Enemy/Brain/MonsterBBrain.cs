@@ -23,6 +23,18 @@ namespace GameJam26.Enemy
         {
             var agent = GetComponent<NavMeshAgent>();
             var anim = GetComponent<Animator>();
+            if (_chaseTarget == null)
+            {
+                var player = FindFirstObjectByType<PlayerController>();
+                if (player != null)
+                {
+                    _chaseTarget = player.transform;
+                }
+                else
+                {
+                    Debug.LogError("MonsterBBrain: Chase target is not assigned and no PlayerController found in the scene.");
+                }
+            }
             _context = new MonsterBContext(transform, anim, config, new NavAgentMotor2D(agent, transform))
             {
                 spawnPos = transform.position,
