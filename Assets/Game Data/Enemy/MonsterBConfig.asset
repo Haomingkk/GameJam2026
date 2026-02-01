@@ -9,10 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fba6999cdcf12554eaee02183fa97e17, type: 3}
-  m_Name: MonsterAConfig
-  m_EditorClassIdentifier: Assembly-CSharp::GameJam26.Enemy.MonsterAConfig
-  patrolSpeed: 0
+  m_Script: {fileID: 11500000, guid: 98f12c91db16d0049bc3b0ad90f5d822, type: 3}
+  m_Name: MonsterBConfig
+  m_EditorClassIdentifier: Assembly-CSharp::GameJam26.Enemy.MonsterBConfig
+  patrolSpeed: 3
+  patrolIdleDuration: 5
+  patrolRadius: 5
+  patrolMoveStopDistance: 0.2
   chaseSpeed: 5
   senseDistance: 8
   stopDistance: 0.1
