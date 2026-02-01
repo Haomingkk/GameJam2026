@@ -8,7 +8,7 @@ namespace GameJam2026.GamePlay
     {
         private readonly List<IInteractable> _nearby = new();
         private IInteractable _currentInteractable;
-        private bool _calculatingNearInteractable = true;
+
         private void OnTriggerEnter2D(Collider2D other)
         {
             var interactable = other.GetComponentInParent<IInteractable>();
@@ -29,9 +29,13 @@ namespace GameJam2026.GamePlay
 
             _currentInteractable = _GetClosestInteractable();
         }
+        public IInteractable GetInteractable() {
+            return _currentInteractable;
+        
+        }
         private IInteractable _GetClosestInteractable()
         {
-            if (_calculatingNearInteractable == false) return null;
+            if (PlayerController.instance.GetCalculatingNearInteractable() == false) return null;
             Vector2 p = transform.position;
 
             float bestDistSq = float.PositiveInfinity;
