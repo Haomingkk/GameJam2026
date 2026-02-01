@@ -4,6 +4,8 @@ public class MonsterAudioController : MonoBehaviour
 {
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] audioClips;
+
+[SerializeField] private AudioClip attackClip;
     [SerializeField] private float range = 10f;
     [SerializeField] private float playInterval = 2f;
 
@@ -58,6 +60,17 @@ public class MonsterAudioController : MonoBehaviour
         AudioClip randomClip = audioClips[Random.Range(0, audioClips.Length)];
         audioSource.PlayOneShot(randomClip);
         Debug.Log("Playing monster audio: " + randomClip.name);
+    }
+
+    public void PlayAttackAudio()
+    {
+        if (!audioSource || attackClip == null)
+        {
+            return;
+        }
+
+        audioSource.PlayOneShot(attackClip);
+        Debug.Log("Playing monster attack audio: " + attackClip.name);
     }
 
     void OnDrawGizmos()

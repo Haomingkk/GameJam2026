@@ -3,7 +3,11 @@ using UnityEngine;
 public class PlayerAudioController : MonoBehaviour
 {
     [SerializeField] AudioSource source;
-    [SerializeField] AudioClip clip;
+    [SerializeField] AudioSource sourceB; // for player walk and die
+    [SerializeField] AudioClip heartbeatClip;
+    [SerializeField] AudioClip attackClip;
+    [SerializeField] AudioClip[] walkClip;
+    [SerializeField] AudioClip dieClip;
     [SerializeField] float radius = 25f;
     [SerializeField] float minInterval = 1f;   // very close
     [SerializeField] float maxInterval = 5.0f;    // near edge
@@ -19,6 +23,7 @@ public class PlayerAudioController : MonoBehaviour
     void Start()
     {
         if (!source) source = GetComponent<AudioSource>();
+        if (!sourceB) sourceB = GetComponent<AudioSource>(); // not ideal
         monsters = GameObject.FindGameObjectsWithTag("Monster");
     }
 
@@ -40,7 +45,7 @@ public class PlayerAudioController : MonoBehaviour
         if (playTimer >= interval)
         {
             playTimer = 0f;
-            source.PlayOneShot(clip);
+            source.PlayOneShot(heartbeatClip);
         }
     }
     
@@ -81,6 +86,44 @@ public class PlayerAudioController : MonoBehaviour
 
         return Mathf.Sqrt(best);
     }
+
+    public void PlayerWalk()
+    {
+        if (!sourceB || walkClip.Length == 0)
+        {
+            return;
+        }
+
+        // Only play walk if no other audio is actively playing on sourceB
+        if (sourceB.isPlaying)
+        {
+            return;
+        }
+
+        AudioClip ac = walkClip[Random.Range(0, walkClip.Length)];
+        sourceB.PlayOneShot(ac);
+    }
+
+    public void PlayerFail()
+    {
+        if (!sourceB || dieClip == null)
+        {
+            return;
+        }
+
+        sourceB.PlayOneShot(dieClip);
+    }
+
+        public void PlayerAttach()
+    {
+        if (!sourceB || attackClip == null)
+        {
+            return;
+        }
+
+        sourceB.PlayOneShot(attackClip);
+    }
+
 
     void OnDrawGizmos()
     {
