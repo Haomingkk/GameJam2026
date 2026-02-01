@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
@@ -21,9 +22,12 @@ namespace GameJam2026.GamePlay
         [SerializeField] private int _maxHealth = 3;
         [SerializeField] private float _maxEnergy = 10f;
         [SerializeField] private int _maxCoin = 99999;
+        [SerializeField] private float _invincibleTime = 0.5f;
+        private bool _isInvicible;
         private int _health;
         private PlayerState _playerState;
         private int _coin;
+        private float _energy;
 
         [Header("Mask Status")]
         [SerializeField] private float _energyComsumeSpeed=0.1f;
@@ -34,12 +38,14 @@ namespace GameJam2026.GamePlay
         public MaskState maskState { get; private set; }
        
 
-        private float _energy;
+        
         private bool _isPlayerinControl=true;// change with game mode, may change while we have game mode script
         private bool _isAllowToMove=true;
 
         private Vector2 _moveInput;
 
+        private Coroutine _lootCoroutine;
+        private Coroutine _damagedCoroutine;
         #region Unity Lifecycle
         private void Awake()
         {
@@ -63,7 +69,7 @@ namespace GameJam2026.GamePlay
         }
         private void Update()
         {
-            _HandleMaskInput();
+            _HandlePlayerInput();
             _HandleMaskAStates();
             _UpdateMaskEnergy();
         }
@@ -91,7 +97,12 @@ namespace GameJam2026.GamePlay
 
             
         }
-       
+        public void OnPlayerDamaged(Vector2 monsterdirection) {
+            if (!_isInvicible) {
+                _UpdateHealth(-1);
+            }
+        }
+      
         private void _InitPlayerStatus() {
             _health = _maxHealth;
             _energy = _maxEnergy;
@@ -117,7 +128,7 @@ namespace GameJam2026.GamePlay
             }
             
         }
-        private void _HandleMaskInput()
+        private void _HandlePlayerInput()
         {
             var kb = Keyboard.current;
             if (kb == null) return;
@@ -130,6 +141,9 @@ namespace GameJam2026.GamePlay
 
             if (kb.digit3Key.wasPressedThisFrame)
                 _ToggleMask(MaskState.MaskD);
+            if (kb.eKey.wasPressedThisFrame || kb.spaceKey.wasPressedThisFrame) {
+                _TryInteractive();
+            }
         }
         private void _ToggleMask(MaskState target)
         {
@@ -154,13 +168,14 @@ namespace GameJam2026.GamePlay
             Debug.Log($"Player Switch to mask {maskState} now!");
         }
         private void _UpdateMaskEnergy() {
-            if (maskState != MaskState.None && maskState != MaskState.MaskD)
+            if (maskState == MaskState.None) { return; }
+            if (maskState != MaskState.MaskD)
             {
                 _energy -= _energyComsumeSpeed * Time.deltaTime;
                 if (_energy <= 0) { _energy = 0;_ToggleMask(maskState); }
                 OnEnergyUpdate?.Invoke();
             }
-            else if (maskState == MaskState.MaskD) {
+            else  {
                 if (_isGartheringEnergy)
                 {
                     _energy = Math.Min(_energy += _energyGatheringSpeed *= Time.deltaTime, _maxEnergy);
@@ -172,12 +187,64 @@ namespace GameJam2026.GamePlay
                     OnEnergyUpdate?.Invoke();
                 }
             }
+            Debug.Log($"Energy is Updating . Player has {_energy} Energy now!");
         }
         private void _UpdateCoin(int amount) {
             if (amount > 0) {
                 _coin = Math.Min(_coin + amount, _maxCoin);
                 OnCoinUpdate?.Invoke();
             }
+        }
+        private void _UpdateHealth(int amount) {
+            if (amount < 0) {
+                _health += amount;
+                if (_health <= 0)
+                {
+                    StartCoroutine(_OnDie());
+                }
+                else {
+                    if (_lootCoroutine != null) { StopCoroutine(_lootCoroutine); }
+                    if (_damagedCoroutine != null) { StopCoroutine(_damagedCoroutine); }
+                    StartCoroutine(_OnDamaged());
+                }
+               
+            }
+            OnHealthUpdate?.Invoke();
+        }
+        private void _TryInteractive() { 
+           //TODO: Find nearest interactable item
+           //if treasure box, startloot
+        }
+        private void _StartLoot() {
+            _lootCoroutine=StartCoroutine(_OnLootRountine());
+        }
+        private IEnumerator _OnLootRountine() {
+            _isAllowToMove = false;
+            _playerState = PlayerState.Interact;
+            yield return new WaitForSeconds(_interactiveFreezeTime);
+            _isAllowToMove = true;
+            _playerState = PlayerState.Idle;
+            //TODO: add Coins on Player status
+        }
+        private void _InterruptLootCoroutine() {
+            StopCoroutine(_lootCoroutine);
+            _lootCoroutine = null;
+        }
+        private IEnumerator _OnDamaged() {
+            _playerState = PlayerState.TakeDamage;
+            _isAllowToMove = false;
+            yield return new WaitForSeconds(_damagedFreezeTime);
+            _playerState = PlayerState.Idle;
+            _isAllowToMove = true;
+        }
+        private IEnumerator _OnInvencible() { 
+           _isInvicible = true;
+            yield return new WaitForSeconds(_invincibleTime);
+            _isInvicible = false;
+        
+        }
+        private IEnumerator _OnDie() {
+            yield return new WaitForSeconds(_dieAnimationLength);
         }
     }
     
