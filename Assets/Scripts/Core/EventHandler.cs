@@ -1,9 +1,9 @@
 using System;
-using UnityEngine.UI;
+using UnityEngine;
 public static class EventHandler
 {
-    public static event Action<Image> InstantiateMonsterFace;
-    public static void CallInstantiateMonsterFace(Image monsterFace)
+    public static event Action<Sprite> InstantiateMonsterFace;
+    public static void CallInstantiateMonsterFace(Sprite monsterFace)
     {
         InstantiateMonsterFace?.Invoke(monsterFace);
     }
