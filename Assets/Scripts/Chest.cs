@@ -1,3 +1,4 @@
+using GameJam2026.GamePlay;
 using UnityEngine;
 
 namespace GameJam26
@@ -15,7 +16,7 @@ namespace GameJam26
 
         public void SendPlayerCoin(int coinAmount)
         {
-            // Find Player and add coin
+            PlayerController.instance.OnCoinCollected(coinAmount);
 
         }
 
