@@ -1,3 +1,4 @@
+
 using GameJam26;
 using System;
 using System.Collections;
@@ -15,8 +16,9 @@ namespace GameJam2026.GamePlay
         public static PlayerController instance { get; private set; }
 
         public event Action <float> OnEnergyUpdate;
-        public event Action OnCoinUpdate;
+        public event Action <int> OnCoinUpdate;
         public event Action <int> OnHealthUpdate;
+        public event Action OnMaskStateUpdate;
 
         public int watchingPlayerNum;
 
@@ -30,7 +32,7 @@ namespace GameJam2026.GamePlay
         [Header("Player Status")]
         [SerializeField] private int _maxHealth = 3;
         [SerializeField] private float _maxEnergy = 10f;
-        [SerializeField] private int _maxCoin = 99999;
+        [SerializeField] private int _maxCoin = 9999;
         [SerializeField] private float _invincibleTime = 0.5f;
         private bool _isInvicible;
         private int _health;
@@ -243,10 +245,12 @@ namespace GameJam2026.GamePlay
                 maskState = target;
                 if (maskState == MaskState.MaskD) {
                     _SwitchToMaskDSight();
+                    OnMaskStateUpdate?.Invoke();
                     return;
                 }
                     }
-            Debug.Log($"Player Switch to mask {maskState} now!");
+            //Debug.Log($"Player Switch to mask {maskState} now!");
+            OnMaskStateUpdate?.Invoke();
             _SwitchToNormalSight();
         }
         private void _HandleMaskAStates() {
@@ -295,7 +299,7 @@ namespace GameJam2026.GamePlay
             if (amount > 0) {
                 _coin = Math.Min(_coin + amount, _maxCoin);
                 Debug.Log($"Coin {amount}");
-                OnCoinUpdate?.Invoke();
+                OnCoinUpdate?.Invoke(_coin);
             }
         }
         private void _UpdateHealth(int amount) {
