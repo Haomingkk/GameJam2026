@@ -11,5 +11,7 @@ namespace GameJam26.Enemy
         void DisableMotor();
 
         void EnableMotor();
+
+        bool Reached(float stopDistance);
     }
 }

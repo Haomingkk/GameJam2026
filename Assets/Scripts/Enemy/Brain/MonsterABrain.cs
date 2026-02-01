@@ -6,6 +6,7 @@ using GameJam26.FSM;
 namespace GameJam26.Enemy
 {
     [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Animator))]
     public class MonsterABrain : MonoBehaviour
     {
@@ -24,6 +25,18 @@ namespace GameJam26.Enemy
         {
             var agent = GetComponent<NavMeshAgent>();
             var anim = GetComponent<Animator>();
+            if (_chaseTarget == null)
+            {
+                var player = FindFirstObjectByType<PlayerController>();
+                if (player != null)
+                {
+                    _chaseTarget = player.transform;
+                }
+                else
+                {
+                    Debug.LogError("MonsterABrain: Chase target is not assigned and no PlayerController found in the scene.");
+                }
+            }
             _context = new MonsterAContext(transform, anim, config, new NavAgentMotor2D(agent, transform))
             {
                 spawnPos = transform.position,
@@ -70,7 +83,7 @@ namespace GameJam26.Enemy
                     }
                 }
             }
-            else if (/*collision.CompareTag("Player")*/ true)
+            else if (collision.CompareTag("Player"))
             {
                 if (Time.time < _context.nextBumpTime)
                 {
@@ -95,6 +108,7 @@ namespace GameJam26.Enemy
             _context.isKnockback = true;
             _context.knockEndTime = Time.time + _context.Config.knockbackDuration;
             _context.knockDirection = directionAwayFromPlayer;
+            EventHandler.CallInstantiateMonsterFace(_context.Config.monsterFace);
         }
 
         private bool _SensePlayer()

@@ -7,15 +7,20 @@ namespace GameJam26.Enemy
     {
         [Header("Patrol")]
         public float patrolSpeed = 3.0f;
+        public float patrolIdleDuration = 5.0f;    // å·¡é€»ç§»åŠ¨ç­‰å¾…æ—¶é—´
+        public float patrolRadius = 5.0f;          // å·¡é€»åŠå¾„
+        public float patrolMoveStopDistance = 0.2f;// èµ°åˆ°ç‚¹å¤šè¿‘ç®—åˆ°è¾¾
         [Header("Chase")]
         public float chaseSpeed = 5.0f;
-        public float senseDistance = 8.0f;         // ÊÓÒ°¾àÀë
-        public float stopDistance = 0.1f;          // ×·ÖğÊ±ÓëÄ¿±êµÄ×îĞ¡¾àÀë
-        public float lostTargetTimeout = 2.0f;     // Ê§È¥Ä¿±êºó£¬·ÅÆú×·ÖğµÄÊ±¼ä
-        public float doorBreakDuration = 3.0f;     // ÆÆÃÅËùĞèÊ±¼ä
+        public float senseDistance = 8.0f;         // è§†é‡è·ç¦»
+        public float stopDistance = 0.1f;          // è¿½é€æ—¶ä¸ç›®æ ‡çš„æœ€å°è·ç¦»
+        public float lostTargetTimeout = 2.0f;     // å¤±å»ç›®æ ‡åï¼Œæ”¾å¼ƒè¿½é€çš„æ—¶é—´
+        public float doorBreakDuration = 3.0f;     // ç ´é—¨æ‰€éœ€æ—¶é—´
         [Header("Knockback")]
-        public float knockbackDistance = 5.0f;     // »÷ÍË¾àÀë
-        public float knockbackDuration = 0.5f;     // »÷ÍË³ÖĞøÊ±¼ä
-        public float bumpCooldown = 0.4f;          // Åö×²ºóÀäÈ´Ê±¼ä 
+        public float knockbackDistance = 5.0f;     // å‡»é€€è·ç¦»
+        public float knockbackDuration = 0.5f;     // å‡»é€€æŒç»­æ—¶é—´
+        public float bumpCooldown = 0.4f;          // ç¢°æ’åå†·å´æ—¶é—´
+        [Header("Face Sprite")]
+        public Sprite monsterFace;                  // æ€ªç‰©é¢éƒ¨å›¾åƒ
     }
 }
