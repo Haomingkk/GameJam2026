@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.Rendering.Universal;
 
 namespace GameJam2026.GamePlay
 {
@@ -17,6 +18,9 @@ namespace GameJam2026.GamePlay
 
         [Header("Player Movement")]
         [SerializeField]private float _walkSpeed = 5.0f;
+        [SerializeField] private float _interactiveFreezeTime = 2.0f;
+        [SerializeField] private float _damagedFreezeTime = 1.0f;
+        [SerializeField] private float _dieAnimationLength = 2.0f;
 
         [Header("Player Status")]
         [SerializeField] private int _maxHealth = 3;
@@ -28,6 +32,9 @@ namespace GameJam2026.GamePlay
         private PlayerState _playerState;
         private int _coin;
         private float _energy;
+        [Header("Player Sight")]
+        [SerializeField] GameObject _normalSight;
+        [SerializeField] GameObject _maskDSight;
 
         [Header("Mask Status")]
         [SerializeField] private float _energyComsumeSpeed=0.1f;
@@ -76,6 +83,8 @@ namespace GameJam2026.GamePlay
         private void FixedUpdate()
         {
             _PlayerMovement();
+            if (_moveInput != Vector2.zero)
+               _UpdateViewDirection(_moveInput);
         }
         #endregion
         public void OnMove(InputValue value)
@@ -153,9 +162,16 @@ namespace GameJam2026.GamePlay
             {
                 maskState = MaskState.None;
             }
-            else if(_energy>0)
-            { maskState = target; }
+            else if (_energy > 0 || maskState == MaskState.MaskD) 
+            { 
+                maskState = target;
+                if (maskState == MaskState.MaskD) {
+                    _SwitchToMaskDSight();
+                    return;
+                }
+                    }
             Debug.Log($"Player Switch to mask {maskState} now!");
+            _SwitchToNormalSight();
         }
         private void _HandleMaskAStates() {
             if (maskState != MaskState.MaskA && maskState != MaskState.InvalidMaskA) return;
@@ -166,6 +182,16 @@ namespace GameJam2026.GamePlay
             }
             else if (maskState == MaskState.InvalidMaskA) { maskState = MaskState.MaskA; }
             Debug.Log($"Player Switch to mask {maskState} now!");
+        }
+        private void _UpdateViewDirection(Vector2 move)
+        {
+            if (move.sqrMagnitude < 0.001f)
+                return;
+
+            move.Normalize();
+            float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg;
+            angle = Mathf.Round(angle / 45f) * 45f;
+            _maskDSight.transform.rotation = Quaternion.Euler(0f, 0f, angle);
         }
         private void _UpdateMaskEnergy() {
             if (maskState == MaskState.None) { return; }
@@ -211,6 +237,15 @@ namespace GameJam2026.GamePlay
             }
             OnHealthUpdate?.Invoke();
         }
+        private void _SwitchToNormalSight() {
+            _normalSight.SetActive(true);
+            _maskDSight.SetActive(false);
+        }
+        private void _SwitchToMaskDSight() {
+            _normalSight.SetActive(false);
+            _maskDSight.SetActive(true);
+        }
+
         private void _TryInteractive() { 
            //TODO: Find nearest interactable item
            //if treasure box, startloot
