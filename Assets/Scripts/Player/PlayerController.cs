@@ -17,6 +17,7 @@ namespace GameJam2026.GamePlay
         public Action OnCoinUpdate;
         public Action OnHealthUpdate;
 
+        public int watchingPlayerNum;
         private Rigidbody2D _rb2D;
 
         [Header("Player Movement")]
@@ -24,6 +25,7 @@ namespace GameJam2026.GamePlay
         [SerializeField] private float _interactiveFreezeTime = 2.0f;
         [SerializeField] private float _damagedFreezeTime = 1.0f;
         [SerializeField] private float _dieAnimationLength = 2.0f;
+        [SerializeField] private float _watchingModifier = 0.8f;
 
         [Header("Player Status")]
         [SerializeField] private int _maxHealth = 3;
@@ -35,6 +37,11 @@ namespace GameJam2026.GamePlay
         private PlayerState _playerState;
         private int _coin;
         private float _energy;
+
+        [Header("Knockback")]
+        [SerializeField] private float _knockbackForce = 6f;
+        [SerializeField] private float _knockbackTime = 0.12f;
+
         [Header("Player Sight")]
         [SerializeField] GameObject _normalSight;
         [SerializeField] GameObject _maskDSight;
@@ -59,6 +66,7 @@ namespace GameJam2026.GamePlay
 
         private Coroutine _lootCoroutine;
         private Coroutine _damagedCoroutine;
+        private Coroutine _knockbackRoutine;
         #region Unity Lifecycle
         private void Awake()
         {
@@ -88,6 +96,7 @@ namespace GameJam2026.GamePlay
         }
         private void FixedUpdate()
         {
+            if (_knockbackRoutine!=null) return;
             _PlayerMovement();
             if (_moveInput != Vector2.zero)
                _UpdateViewDirection(_moveInput);
@@ -135,7 +144,11 @@ namespace GameJam2026.GamePlay
         }
         public void OnPlayerDamaged(Vector2 monsterdirection) {
             if (!_isInvicible) {
+                
                 _UpdateHealth(-1);
+                Vector2 knockDir = monsterdirection.normalized;
+                _StartKnockback(knockDir);
+                _OnInvencible();
             }
         }
         public void OnCoinCollected(int amount) {
@@ -163,7 +176,14 @@ namespace GameJam2026.GamePlay
             }
             else
             {
-                _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed;
+                if (maskState != MaskState.MaskA && watchingPlayerNum != 0)
+                {
+                    _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed * _watchingModifier;
+                }
+                else
+                {
+                    _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed;
+                }
                 //Debug.Log($"Player is moving in {_rb2D.linearVelocity} speed");
             }
             
@@ -199,6 +219,17 @@ namespace GameJam2026.GamePlay
 
             return best;
         }
+        private void _StartKnockback(Vector2 direction)
+        {
+            if (_knockbackRoutine != null)
+                StopCoroutine(_knockbackRoutine);
+            else
+            {
+                Debug.Log("Start Knock Back!");
+                _InterruptLootCoroutine();
+                _knockbackRoutine = StartCoroutine(_KnockbackRoutine(direction));
+            }
+        }
         private void _HandlePlayerInput()
         {
             var kb = Keyboard.current;
@@ -215,6 +246,7 @@ namespace GameJam2026.GamePlay
             if (kb.eKey.wasPressedThisFrame || kb.spaceKey.wasPressedThisFrame) {
                 _TryInteractive();
             }
+            if (kb.pKey.wasPressedThisFrame) { OnPlayerDamaged(Vector2.left); }
         }
         private void _ToggleMask(MaskState target)
         {
@@ -289,12 +321,12 @@ namespace GameJam2026.GamePlay
                 _health += amount;
                 if (_health <= 0)
                 {
-                    StartCoroutine(_OnDie());
+                    StartCoroutine(_DieRoutine());
                 }
                 else {
                     if (_lootCoroutine != null) { StopCoroutine(_lootCoroutine); }
                     if (_damagedCoroutine != null) { StopCoroutine(_damagedCoroutine); }
-                    StartCoroutine(_OnDamaged());
+                    //StartCoroutine(_OnDamaged());
                 }
                
             }
@@ -331,9 +363,11 @@ namespace GameJam2026.GamePlay
             _isAllowToMove = true;
             _calculatingNearInteractable = true;
             _playerState = PlayerState.Idle;
+            _lootCoroutine = null;
             _currentInteractable?.Interact();
         }
         private void _InterruptLootCoroutine() {
+            if (_lootCoroutine == null) return;
             StopCoroutine(_lootCoroutine);
             _calculatingNearInteractable = true;
             _lootCoroutine = null;
@@ -351,8 +385,25 @@ namespace GameJam2026.GamePlay
             _isInvicible = false;
         
         }
-        private IEnumerator _OnDie() {
+        private IEnumerator _DieRoutine() {
+            _isPlayerinControl = false;
+            _isAllowToMove = false;
+            _playerState = PlayerState.Die;
             yield return new WaitForSeconds(_dieAnimationLength);
+        }
+        private IEnumerator _KnockbackRoutine(Vector2 direction)
+        {
+            _isAllowToMove = false;      
+            _rb2D.linearVelocity = Vector2.zero;
+            _playerState = PlayerState.TakeDamage;
+            _rb2D.AddForce(direction * _knockbackForce, ForceMode2D.Impulse);
+            Debug.Log($"Player Knock Back!{direction*_knockbackForce}");
+            yield return new WaitForSeconds(_knockbackTime);
+
+            _rb2D.linearVelocity= Vector2.zero;
+            _isAllowToMove = true;
+            _playerState = PlayerState.Idle;
+            _knockbackRoutine = null;
         }
     }
     
