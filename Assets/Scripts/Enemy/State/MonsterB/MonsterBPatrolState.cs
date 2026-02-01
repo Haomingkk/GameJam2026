@@ -10,6 +10,8 @@ namespace GameJam26.Enemy
         public string Name => "Patrol";
         public void OnEnter(MonsterBContext context)
         {
+            Debug.Log("MonsterB Entering Patrol State");
+
             context.animationDriver.EnterMove(Vector2.zero);
 
             context.patrolTargetPos = PickRandomNavPointNear(context, context.spawnPos, context.Config.patrolRadius);
@@ -29,7 +31,7 @@ namespace GameJam26.Enemy
         }
         public void OnExit(MonsterBContext context)
         {
-
+            Debug.Log("MonsterB Exiting Patrol State");
         }
 
         private static Vector2 PickRandomNavPointNear(MonsterBContext context, Vector2 center, float radius)

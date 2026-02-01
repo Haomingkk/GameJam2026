@@ -9,6 +9,7 @@ namespace GameJam26.Enemy
         public string Name => "Chase";
         public void OnEnter(MonsterBContext context)
         {
+            Debug.Log("MonsterB Entering Chase State");
             Vector3 targetPos = context.target.position;
 
             context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, 0f);
@@ -19,6 +20,11 @@ namespace GameJam26.Enemy
         }
         public void Tick(MonsterBContext context, float deltaTime)
         {
+            if (context.target == null)
+            {
+                Debug.LogWarning("MonsterBChaseState Tick called but target is null");
+                return;
+            }
             Vector3 targetPos = context.target.position;
 
             context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, deltaTime);
@@ -31,6 +37,7 @@ namespace GameJam26.Enemy
         {
             context.target = null;
             context.Motor.Stop();
+            Debug.Log("MonsterB Exiting Chase State");
         }
     }
 
