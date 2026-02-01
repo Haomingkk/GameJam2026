@@ -4,37 +4,43 @@ namespace GameJam26.Enemy
 {
     public class MonsterBContext
     {
-        // Unity×é¼ş
+        // Unityç»„ä»¶
         public Transform Root { get; }
         public IAnimationDriver animationDriver;
 
-        // Runtime¶ÔÏó
+        // Runtimeå¯¹è±¡
         public Transform target;
 
-        // ÅäÖÃ
+        // é…ç½®
         public MonsterBConfig Config { get; }
 
-        // ÒÆ¶¯ÄÜÁ¦
+        // ç§»åŠ¨èƒ½åŠ›
         public IActorMotor2D Motor { get; }
 
-        // ÃÅ½»»¥
+        // çŠ¶æ€æ—¶é—´
+        public float currentTime;
+
+        // é—¨äº¤äº’
         public Door currentDoor;
         public bool shouldBreakDoor;
         public float doorBreakEndTime;
 
-        // ×·Öğ
+        // è¿½é€
         public Vector2 spawnPos;
         public float lastSeePlayerTime;
-        public float currentTime;
-        public bool hasLineOfSight;             // µ±Ç°ÊÇ·ñÓĞÊÓÏß
-        public bool considerPlayerAsEnemy;      // ÊÇ·ñ½«Íæ¼ÒÊÓÎªµĞÈË
+        public bool hasLineOfSight;             // å½“å‰æ˜¯å¦æœ‰è§†çº¿
+        public bool considerPlayerAsEnemy;      // æ˜¯å¦å°†ç©å®¶è§†ä¸ºæ•Œäºº
 
-        // »÷ÍË
+        // å‡»é€€
         public bool isKnockback;
         public float knockEndTime;
         public Vector2 knockDirection;
         public float nextBumpTime;
         public float knockbackSpeed;
+
+        // å·¡é€»
+        public float patrolIdleEndTime;
+        public Vector2 patrolTargetPos;
 
         public MonsterBContext(Transform root, Animator animator, MonsterBConfig config, IActorMotor2D motor)
         {

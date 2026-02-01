@@ -30,6 +30,15 @@ namespace GameJam26.Enemy
             _agent.ResetPath();
         }
 
+        public bool Reached(float stopDistance)
+        {
+            if (_agent.pathPending)
+            {
+                return false;
+            }
+            return _agent.remainingDistance <= Mathf.Max(stopDistance, _agent.stoppingDistance);
+        }
+
         public Vector2 GetCurrentVelocity()
         {
             return new Vector2(_agent.velocity.x, _agent.velocity.y);

@@ -35,5 +35,10 @@ namespace GameJam26.Enemy
         {
             throw new System.NotImplementedException();
         }
+
+        public bool Reached(float stopDistance)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }
