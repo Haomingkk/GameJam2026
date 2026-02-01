@@ -12,6 +12,9 @@ namespace GameJam26.Enemy
         public string Name => "Chase";
         public void OnEnter(MonsterAContext context)
         {
+            Vector3 targetPos = context.target.position;
+
+            context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, 0f);
             Vector2 currentDir = context.Motor.GetCurrentVelocity();
             currentDir.y = 0;
             currentDir.x = currentDir.x > 0 ? 1 : -1;
@@ -21,8 +24,12 @@ namespace GameJam26.Enemy
         public void Tick(MonsterAContext context, float deltaTime)
         {
             Vector3 targetPos = context.target.position;
-            // TODO: 接寻路接口
+
             context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, deltaTime);
+            Vector2 currentDir = context.Motor.GetCurrentVelocity();
+            currentDir.y = 0;
+            currentDir.x = currentDir.x > 0 ? 1 : -1;
+            context.animationDriver.SetMoveDir(currentDir);
         }
 
         public void OnExit(MonsterAContext context)

@@ -6,6 +6,7 @@ using GameJam26.FSM;
 namespace GameJam26.Enemy
 {
     [RequireComponent(typeof(NavMeshAgent))]
+    [RequireComponent(typeof(Collider2D))]
     [RequireComponent(typeof(Animator))]
     public class MonsterABrain : MonoBehaviour
     {
@@ -70,7 +71,7 @@ namespace GameJam26.Enemy
                     }
                 }
             }
-            else if (/*collision.CompareTag("Player")*/ true)
+            else if (collision.CompareTag("Player"))
             {
                 if (Time.time < _context.nextBumpTime)
                 {
