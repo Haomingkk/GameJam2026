@@ -34,7 +34,9 @@ namespace GameJam26.Enemy
 
         public void SetMoveDir(Vector2 dir)
         {
+            // x为1或-1表示左右移动
             _anim.SetFloat(MoveX, dir.x);
+            // 恒定为0
             _anim.SetFloat(MoveY, dir.y);
         }
 

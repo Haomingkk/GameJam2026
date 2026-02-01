@@ -154,7 +154,11 @@ namespace GameJam2026.GamePlay
         public void OnCoinCollected(int amount) {
             _UpdateCoin(amount);
         }
-      
+
+        public MaskState GetCurrentMaskState() {
+            return maskState;
+        }
+
         private void _InitPlayerStatus() {
             _health = _maxHealth;
             _energy = _maxEnergy;

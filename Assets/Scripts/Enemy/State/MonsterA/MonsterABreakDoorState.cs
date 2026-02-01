@@ -18,7 +18,7 @@ namespace GameJam26.Enemy
         {
             if (context.currentTime >= context.doorBreakEndTime)
             {
-                // ±ÜÃâ¿¨ËÀÔÚÕâÒ»²½
+                // é¿å…å¡æ­»åœ¨è¿™ä¸€æ­¥
                 context.shouldBreakDoor = false;
                 
                 if (context.currentDoor == null)
