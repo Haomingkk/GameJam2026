@@ -11,6 +11,7 @@ public class UIManager : MonoBehaviour
     [Header("Player Status")]
     [SerializeField] private Image _energyBarMask;
     [SerializeField] private List<Image> _healthImages = new List<Image>();
+    [SerializeField] private List<Image> _maskImages = new List<Image>();
 
     private float _maxBarWidth;
     private void Awake()
@@ -50,7 +51,7 @@ public class UIManager : MonoBehaviour
         rt.SetSizeWithCurrentAnchors(RectTransform.Axis.Horizontal, width);
     }
     private void _UpdateUIHealth(int health) {
-        Debug.Log(health);
+        
         for (int i = 0; i < _healthImages.Count-health; i++) {
             _healthImages[i].enabled = true;
         }
