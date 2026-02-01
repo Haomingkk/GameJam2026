@@ -6,7 +6,7 @@ namespace GameJam26.Enemy
     public class MonsterAConfig : ScriptableObject
     {
         [Header("Patrol")]
-        public float patrolSpeed = 3.0f;
+        public float patrolSpeed = 0f;
         [Header("Chase")]
         public float chaseSpeed = 5.0f;
         public float senseDistance = 8.0f;         // 视野距离
