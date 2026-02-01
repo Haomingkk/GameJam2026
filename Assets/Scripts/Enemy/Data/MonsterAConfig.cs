@@ -17,6 +17,8 @@ namespace GameJam26.Enemy
         public float knockbackDistance = 5.0f;     // 击退距离
         public float knockbackDuration = 0.5f;     // 击退持续时间
         public float bumpCooldown = 0.4f;          // 碰撞后冷却时间
+        [Header("Face Sprite")]
+        public Sprite monsterFace;                  // 怪物面部图像
     }
 
 }

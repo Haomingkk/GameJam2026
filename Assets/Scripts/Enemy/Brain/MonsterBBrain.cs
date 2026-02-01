@@ -106,6 +106,7 @@ namespace GameJam26.Enemy
                 player.OnPlayerDamaged(dirToPlayer);
                 // Boss knockback
                 _StartKnockback(-dirToPlayer);
+                EventHandler.CallInstantiateMonsterFace(_context.Config.monsterFace);
             }
         }
 

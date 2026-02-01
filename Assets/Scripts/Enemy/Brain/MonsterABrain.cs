@@ -108,6 +108,7 @@ namespace GameJam26.Enemy
             _context.isKnockback = true;
             _context.knockEndTime = Time.time + _context.Config.knockbackDuration;
             _context.knockDirection = directionAwayFromPlayer;
+            EventHandler.CallInstantiateMonsterFace(_context.Config.monsterFace);
         }
 
         private bool _SensePlayer()
