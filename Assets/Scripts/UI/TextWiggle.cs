@@ -1,6 +1,7 @@
 using UnityEngine;
+using UnityEngine.EventSystems;
 
-public class TextWiggle : MonoBehaviour
+public class TextWiggle : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
 {
     // Adjust these in the Inspector to control the wiggle effect
     public float amplitude = 0.5f; // The maximum distance the object will move from its start position
@@ -11,6 +12,7 @@ public class TextWiggle : MonoBehaviour
     private float noiseOffsetX;
     private float noiseOffsetY;
     private float noiseOffsetZ;
+    public bool isPause = false;
 
     void Start()
     {
@@ -32,27 +34,47 @@ public class TextWiggle : MonoBehaviour
 
     void Update()
     {
-        // Calculate noise values for each axis using Time.time to "scroll" through the noise
-        float x = Mathf.PerlinNoise(noiseOffsetX + Time.time * frequency, 0f) * 2f - 1f;
-        float y = Mathf.PerlinNoise(noiseOffsetY + Time.time * frequency, 0f) * 2f - 1f;
-        float z = Mathf.PerlinNoise(noiseOffsetZ + Time.time * frequency, 0f) * 2f - 1f;
-
-        // The Mathf.PerlinNoise function returns a value between 0 and 1.
-        // We transform it to the range -1 to 1 by multiplying by 2 and subtracting 1.
-
-        // Apply the amplitude and combine with the starting position
-        Vector3 wigglePos = new Vector3(x, y, z) * amplitude;
-        Vector3 newPosition = startPosition + wigglePos;
-
-        // Update the object's position
-        if (useLocalPosition)
+        if (!isPause)
         {
-            transform.localPosition = newPosition;
-        }
-        else
-        {
-            transform.position = newPosition;
+
+            // Calculate noise values for each axis using Time.time to "scroll" through the noise
+            float x = Mathf.PerlinNoise(noiseOffsetX + Time.time * frequency, 0f) * 2f - 1f;
+            float y = Mathf.PerlinNoise(noiseOffsetY + Time.time * frequency, 0f) * 2f - 1f;
+            float z = Mathf.PerlinNoise(noiseOffsetZ + Time.time * frequency, 0f) * 2f - 1f;
+
+            // The Mathf.PerlinNoise function returns a value between 0 and 1.
+            // We transform it to the range -1 to 1 by multiplying by 2 and subtracting 1.
+
+            // Apply the amplitude and combine with the starting position
+            Vector3 wigglePos = new Vector3(x, y, z) * amplitude;
+            Vector3 newPosition = startPosition + wigglePos;
+
+            // Update the object's position
+            if (useLocalPosition)
+            {
+                transform.localPosition = newPosition;
+            }
+            else
+            {
+                transform.position = newPosition;
+            }
         }
     }
 
+    public void OnPointerEnter(PointerEventData eventData)
+    {
+        ApplyPosition(startPosition);
+        isPause = true;
+    }
+
+    public void OnPointerExit(PointerEventData eventData)
+    {
+        isPause = false;
+    }
+
+    void ApplyPosition(Vector3 pos)
+    {
+        if (useLocalPosition) transform.localPosition = pos;
+        else transform.position = pos;
+    }
 }
