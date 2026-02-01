@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using System.Collections.Generic;
 
-namespace GameJam26
+namespace GameJam26.AI
 {
     public class SimplePlayer : MonoBehaviour
 {
