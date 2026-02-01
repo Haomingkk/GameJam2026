@@ -16,7 +16,7 @@ GameObject:
   - component: {fileID: 2047343551164421019}
   - component: {fileID: 67845509492780902}
   m_Layer: 6
-  m_Name: Chest
+  m_Name: Chest - S
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -116,7 +116,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 6
   m_MaskInteraction: 0
-  m_Sprite: {fileID: -763610728, guid: bea68023b25196542a2a277d2a84f081, type: 3}
+  m_Sprite: {fileID: 21300000, guid: e2dbdb086b367c341bcbc1511bf55f4b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -164,7 +164,7 @@ PolygonCollider2D:
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 1, y: 1}
+    oldSize: {x: 1, y: 2}
     newSize: {x: 1, y: 1}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
@@ -194,8 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameJam26.ChestAudioController
   audioSource: {fileID: 67845509492780902}
-  openChest: {fileID: 8300000, guid: d3e102684721f28429b0d443f019d025, type: 3}
-  bonus: {fileID: 8300000, guid: 2e2ceda30b0187f4c990d51384dcc6d6, type: 3}
+  openChest: {fileID: 8300000, guid: 72104436880b7644da88e85e3f9ad905, type: 3}
+  bonus: {fileID: 8300000, guid: d56c2c8d00d8ada4e9855bd6fc7b732a, type: 3}
   bonusDelaySeconds: 1
 --- !u!82 &67845509492780902
 AudioSource:
