@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
-  m_Name: Floor Random
+  m_Name: Wall Random
   m_EditorClassIdentifier: Unity.2D.Tilemap.Extras::UnityEngine.RuleTile
   m_DefaultSprite: {fileID: 0}
   m_DefaultGameObject: {fileID: 0}
@@ -18,9 +18,8 @@ MonoBehaviour:
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: -244310364, guid: 820eba072a8a3b445b7ff81f3f1e217e, type: 3}
-    - {fileID: 2043425058, guid: 820eba072a8a3b445b7ff81f3f1e217e, type: 3}
-    - {fileID: 829476715, guid: 820eba072a8a3b445b7ff81f3f1e217e, type: 3}
+    - {fileID: 1822204229, guid: 820eba072a8a3b445b7ff81f3f1e217e, type: 3}
+    - {fileID: -417322869, guid: 820eba072a8a3b445b7ff81f3f1e217e, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1
