@@ -1,0 +1,2 @@
+# C# as text
+*.cs text working-tree-encoding=UTF-8 eol=crlf
