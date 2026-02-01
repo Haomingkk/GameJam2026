@@ -24,7 +24,7 @@ namespace GameJam26.Enemy
         public void Tick(MonsterAContext context, float deltaTime)
         {
             Vector3 targetPos = context.target.position;
-
+            //Debug.Log("Chasing target at position: " + targetPos);
             context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, deltaTime);
             Vector2 currentDir = context.Motor.GetCurrentVelocity();
             currentDir.y = 0;

@@ -84,6 +84,8 @@ namespace GameJam26.Enemy
                 "Knockback Ended and Lost Target"
                 ));
 
+
+            fsm.SetInitialState(patrolState, context);
             return fsm;
         }
     }

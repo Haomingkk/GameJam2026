@@ -21,3 +21,4 @@ MonoBehaviour:
   knockbackDistance: 5
   knockbackDuration: 0.5
   bumpCooldown: 0.4
+  monsterFace: {fileID: 21300000, guid: 3ad08882c55e3a5488881d88777c0de1, type: 3}

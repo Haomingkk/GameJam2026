@@ -119,9 +119,16 @@ namespace GameJam26.Enemy
 
         private bool _SensePlayer()
         {
-            RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance);
-            if (hit.collider != null && (hit.transform == _chaseTarget || hit.transform.IsChildOf(_chaseTarget)))
+            int maskLayer = ~(LayerMask.GetMask("Monster"));
+            RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance, maskLayer);
+            Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
+            //if (hit.collider != null)
+            //{
+            //    Debug.Log("Hit collider: " + hit.collider.name);
+            //}
+            if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
             {
+                //Debug.Log("MonsterBBrain: Player sensed!");
                 return true;
             }
             return false;

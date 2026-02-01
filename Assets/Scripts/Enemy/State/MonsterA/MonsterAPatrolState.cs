@@ -12,12 +12,13 @@ namespace GameJam26.Enemy
 
         public void OnEnter(MonsterAContext context)
         {
+            Debug.Log("MonsterA Entering Patrol State");
             context.animationDriver.EnterIdle();
         }
 
         public void Tick(MonsterAContext context, float deltaTime)
         {
-            
+            //Debug.Log("Patrolling at position: " + context.Root.position);
         }
 
         public void OnExit(MonsterAContext context)
