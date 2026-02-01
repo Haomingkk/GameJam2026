@@ -8,15 +8,16 @@ namespace GameJam26
         public bool isOpen;
         public int coins;
         SpriteRenderer spriteRenderer;
-
+        ChestAudioController chestAudioController;
         void Awake()
         {
             spriteRenderer = GetComponent<SpriteRenderer>();
+            chestAudioController = GetComponent<ChestAudioController>();
         }
 
         public void SendPlayerCoin(int coinAmount)
         {
-            PlayerController.instance.OnCoinCollected(coinAmount);
+           // PlayerController.instance.OnCoinCollected(coinAmount);
 
         }
 
@@ -40,6 +41,12 @@ namespace GameJam26
             }
             // Give coins to player
             SendPlayerCoin(coins);
+
+            //audio
+            if(chestAudioController != null)
+            {
+                chestAudioController.PlayOpenThenBonus();
+            }
         }
     }
 }

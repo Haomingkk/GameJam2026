@@ -20,6 +20,7 @@ namespace GameJam26
         [SerializeField] float linkWidth = 0.25f;
         [SerializeField] bool bidirectional = true;
         [SerializeField] float linkOffset = 0.5f;
+        [SerializeField] DoorAudioController doorAudio;
 
         NavMeshLinkInstance linkInstance;
         SpriteRenderer spriteRenderer;
@@ -31,6 +32,7 @@ namespace GameJam26
             if (!col2D) col2D = GetComponent<Collider2D>();
             spriteRenderer = GetComponent<SpriteRenderer>();
             if (spriteRenderer) originalColor = spriteRenderer.color;
+            if (!doorAudio) doorAudio = GetComponent<DoorAudioController>();
             
             currentHP = maxHP;
             SyncObstacleFromCollider();
@@ -196,6 +198,19 @@ namespace GameJam26
             }
 
             bool shouldOpen = (currentState == DoorState.HealthyLocked);
+
+            if (doorAudio)
+            {
+                if (shouldOpen)
+                {
+                    doorAudio.PlayOpenDoorOneShot();
+                }
+                else
+                {
+                    doorAudio.PlayCloseDoorOneShot();
+                }
+            }
+
             SetOpen(shouldOpen);
             Debug.Log($"Door is now {(shouldOpen ? "open" : "closed")}");
         }
