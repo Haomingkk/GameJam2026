@@ -1,0 +1,28 @@
+using GameJam26.FSM;
+using UnityEngine;
+
+namespace GameJam26.Enemy
+{
+    /// <summary>
+    /// 怪物A的巡逻状态
+    /// </summary>
+    public class MonsterAPatrolState : IState<MonsterAContext>
+    {
+        public string Name => "Patrol";
+
+        public void OnEnter(MonsterAContext context)
+        {
+            context.animationDriver.EnterIdle();
+        }
+
+        public void Tick(MonsterAContext context, float deltaTime)
+        {
+            
+        }
+
+        public void OnExit(MonsterAContext context)
+        {
+            
+        }
+    }
+}

@@ -1,0 +1,23 @@
+using UnityEngine;
+using GameJam26.FSM;
+
+namespace GameJam26.Enemy
+{
+    /// <summary>
+    /// 怪物A的Idle状态
+    /// </summary>
+    public class MonsterAIdleState : IState<MonsterAContext>
+    {
+        public string Name => "Idle";
+
+        public void OnEnter(MonsterAContext context)
+        {
+            context.Motor.Stop();
+            context.animationDriver.EnterIdle();
+        }
+
+        public void Tick(MonsterAContext context, float deltaTime) { }
+
+        public void OnExit(MonsterAContext context) { }
+    }
+}

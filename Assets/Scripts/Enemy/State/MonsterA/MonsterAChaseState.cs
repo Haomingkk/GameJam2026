@@ -1,0 +1,34 @@
+using GameJam2026.GamePlay;
+using GameJam26.FSM;
+using UnityEngine;
+
+namespace GameJam26.Enemy
+{
+    /// <summary>
+    /// 怪物A的Chase状态
+    /// </summary>
+    public class MonsterAChaseState : IState<MonsterAContext>
+    {
+        public string Name => "Chase";
+        public void OnEnter(MonsterAContext context)
+        {
+            Vector2 currentDir = context.Motor.GetCurrentVelocity();
+            currentDir.y = 0;
+            currentDir.x = currentDir.x > 0 ? 1 : -1;
+            context.animationDriver.EnterMove(currentDir);
+        }
+
+        public void Tick(MonsterAContext context, float deltaTime)
+        {
+            Vector3 targetPos = context.target.position;
+            // TODO: 接寻路接口
+            context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, deltaTime);
+        }
+
+        public void OnExit(MonsterAContext context)
+        {
+            context.target = null;
+            context.Motor.Stop();
+        }
+    }
+}
