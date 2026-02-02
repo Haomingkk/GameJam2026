@@ -646,11 +646,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameJam2026.GamePlay.PlayerController
   watchingPlayerNum: 0
-  _walkSpeed: 5
+  _walkSpeed: 3
   _interactiveFreezeTime: 1
   _damagedFreezeTime: 1
   _dieAnimationLength: 1
-  _watchingModifier: 0.1
+  _watchingModifier: 0.5
   _maxHealth: 3
   _maxEnergy: 10
   _maxCoin: 9999

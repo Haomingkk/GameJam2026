@@ -4,6 +4,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
@@ -48,9 +49,11 @@ namespace GameJam2026.GamePlay
         [SerializeField] GameObject _normalSight;
         [SerializeField] GameObject _maskDSight;
         [SerializeField] GameObject _energyCollectSightRange;
+
         [Header("Interactive Range")]
         [SerializeField] InteractiveRange _interactiveRange;
         private bool _calculatingNearInteractable = true;
+
         [Header("Mask Status")]
         [SerializeField] private float _energyComsumeSpeed=0.1f;
         [SerializeField] private float _energyGatheringSpeed = 0.2f;
@@ -60,6 +63,8 @@ namespace GameJam2026.GamePlay
         private float _coinMaskDGatherTimer;
         private int _isGartheringEnergy;
 
+        [Header("Player Audio")]
+        [SerializeField] private PlayerAudioController _audioController;
         public MaskState maskState { get; private set; }
 
 
@@ -131,6 +136,7 @@ namespace GameJam2026.GamePlay
                 {
                     _playerState = PlayerState.Move;
                     _animator.SetBool("isWalking",true);
+                    
                 } 
             }
             else
@@ -186,13 +192,14 @@ namespace GameJam2026.GamePlay
             {
                 if (maskState != MaskState.MaskB && watchingPlayerNum != 0)
                 {
-                    _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed * _watchingModifier;
+                    _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed * _watchingModifier; 
                 }
                 else
                 {
                     _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed;
                 }
-               
+                if (_moveInput.x != 0 || _moveInput.y != 0) { _audioController.PlayerWalk(); }
+
                 //Debug.Log($"Player is moving in {_rb2D.linearVelocity} speed");
             }
             
@@ -389,9 +396,11 @@ namespace GameJam2026.GamePlay
         
         }
         private IEnumerator _DieRoutine() {
+            
             _isPlayerinControl = false;
             _isAllowToMove = false;
             _playerState = PlayerState.Die;
+            _audioController.PlayerFail();
             yield return new WaitForSeconds(_dieAnimationLength);
         }
         private IEnumerator _KnockbackRoutine(Vector2 direction)
