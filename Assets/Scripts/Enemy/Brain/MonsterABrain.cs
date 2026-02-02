@@ -88,10 +88,6 @@ namespace GameJam26.Enemy
                 _context.target = _chaseTarget;
                 _context.lastSeePlayerTime = Time.time;
             }
-            else
-            {
-                _context.target = null;
-            }
 
             _fsm.Tick(_context, Time.deltaTime);
         }

@@ -10,6 +10,11 @@ namespace GameJam26.Enemy
         public void OnEnter(MonsterBContext context)
         {
             Debug.Log("MonsterB Entering Chase State");
+            if (context.target == null)
+            {
+                Debug.LogWarning("MonsterBChaseState OnEnter called but target is null");
+                return;
+            }
             Vector3 targetPos = context.target.position;
 
             context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, 0f);
