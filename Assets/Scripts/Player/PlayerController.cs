@@ -256,7 +256,7 @@ namespace GameJam2026.GamePlay
                 maskState = MaskState.None;
                 _playerMask.sprite = null;
             }
-            else if (_energy > 0 || maskState == MaskState.MaskD) 
+            else if (_energy > 0 || target == MaskState.MaskD) 
             { 
                 maskState = target;
                 if (maskState == MaskState.MaskA || maskState == MaskState.InvalidMaskA) { _playerMask.sprite = _maskSpriteImage[0]; }
