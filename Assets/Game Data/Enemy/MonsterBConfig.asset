@@ -21,7 +21,7 @@ MonoBehaviour:
   stopDistance: 0.1
   lostTargetTimeout: 2
   doorBreakDuration: 3
-  knockbackDistance: 5
-  knockbackDuration: 0.5
+  knockbackDistance: 1
+  knockbackDuration: 0.3
   bumpCooldown: 0.4
   monsterFace: {fileID: 21300000, guid: 306c7ab99abd7de44bb154452ef71771, type: 3}
