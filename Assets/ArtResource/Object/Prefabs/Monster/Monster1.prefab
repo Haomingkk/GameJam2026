@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7708026186441782229}
   - component: {fileID: 744554326861253562}
+  - component: {fileID: 5980170601865321933}
   m_Layer: 0
   m_Name: Monster1
   m_TagString: Untagged
@@ -91,3 +92,61 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_SpriteSortPoint: 0
+--- !u!114 &5980170601865321933
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7819826410323201665}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
+  m_ShadowGroup: 0
+  m_Priority: 2
+  m_ComponentVersion: 5
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 00000000dfa9ae09
+  m_ShapePath:
+  - {x: -0.39205465, y: -0.10527227, z: 0}
+  - {x: -0.40554255, y: 0.038959853, z: 0}
+  - {x: -0.32046163, y: 0.17495324, z: -0.000000027505507}
+  - {x: -0.20239633, y: 0.18960044, z: 0.00000004488095}
+  - {x: 0.19227964, y: 0.16307272, z: -0.00000003670317}
+  - {x: 0.3238383, y: 0.14093606, z: 0.000000004197773}
+  - {x: 0.3853132, y: 0.045773543, z: 0}
+  - {x: 0.38193446, y: -0.124765076, z: 0}
+  - {x: 0.18890768, y: -0.17586927, z: 0.000000030156457}
+  - {x: -0.2766074, y: -0.16810037, z: -0.00000003198886}
+  m_ShapePathHash: -2063983556
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 0}
+  m_ShadowShape2DProvider:
+    rid: -2
+  m_ShadowCastingSource: 1
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: -0.01011467, y: 0.006865576, z: 0}
+      m_Extent: {x: 0.39542788, y: 0.18273485, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0.05
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0.05
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0.05
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 1
+  m_PreviousShadowShape2DSource: {fileID: 744554326861253562}
+  references:
+    version: 2
+    RefIds:
+    - rid: -2
+      type: {class: , ns: , asm: }
