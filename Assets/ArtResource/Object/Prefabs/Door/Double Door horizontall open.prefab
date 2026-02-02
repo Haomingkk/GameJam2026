@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5878870807793196518}
   - component: {fileID: 3546775734008243436}
   m_Layer: 0
-  m_Name: Double Door vertical open
+  m_Name: Double Door horizontall open
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
