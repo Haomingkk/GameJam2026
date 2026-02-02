@@ -17,7 +17,7 @@ namespace GameJam26
 
         public void SendPlayerCoin(int coinAmount)
         {
-           // PlayerController.instance.OnCoinCollected(coinAmount);
+           PlayerController.instance.OnCoinCollected(coinAmount);
 
         }
 
