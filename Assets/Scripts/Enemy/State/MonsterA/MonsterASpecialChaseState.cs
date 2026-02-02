@@ -9,6 +9,11 @@ namespace GameJam26.Enemy
 
         public void OnEnter(MonsterAContext context)
         {
+            if (context.maskBTarget == null)
+            {
+                Debug.Log("MonsterASpecialChaseState OnEnter called but maskBTarget is null");
+                return;
+            }
             context.Motor.MoveTowards(context.maskBTarget.position, context.Config.chaseSpeed, 0f);
             Vector2 currentDir = context.Motor.GetCurrentVelocity();
             currentDir.y = 0;
