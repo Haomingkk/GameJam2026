@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fba6999cdcf12554eaee02183fa97e17, type: 3}
   m_Name: MonsterAConfig
   m_EditorClassIdentifier: Assembly-CSharp::GameJam26.Enemy.MonsterAConfig
-  patrolSpeed: 0
-  chaseSpeed: 5
+  patrolSpeed: 3
+  patrolMoveStopDistance: 0.2
+  chaseSpeed: 3
   senseDistance: 8
   stopDistance: 0.1
   lostTargetTimeout: 2

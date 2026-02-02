@@ -16,6 +16,7 @@ namespace GameJam26.Enemy
             var chaseState = new MonsterAChaseState();
             var breakDoorState = new MonsterABreakDoorState();
             var knockbackState = new MonsterAKnockbackState();
+            var returnToSpawnPosState = new MonsterAReturnToSpawnPosState();
 
             // 任意状态 -> 击退状态
             fsm.AddAnyTransition(knockbackState, new PredTransition<MonsterAContext>(
@@ -29,10 +30,22 @@ namespace GameJam26.Enemy
                 "Find Target"
                 ));
 
-            // 追逐状态 -> 巡逻状态
-            fsm.AddTransition(chaseState, patrolState, new PredTransition<MonsterAContext>(
+            // 追逐状态 -> 回到起始点
+            fsm.AddTransition(chaseState, returnToSpawnPosState, new PredTransition<MonsterAContext>(
                 context => !context.considerPlayerAsEnemy || (context.target == null && (context.currentTime - context.lastSeePlayerTime) >= context.Config.lostTargetTimeout),
                 "Lose Target"
+                ));
+
+            // 回到起始点 -> 巡逻状态
+            fsm.AddTransition(returnToSpawnPosState, patrolState, new PredTransition<MonsterAContext>(
+                context => context.Motor.Reached(context.Config.patrolMoveStopDistance),
+                "Reached Spawn Position"
+                ));
+
+            // 回到起始点 -> 追逐状态
+            fsm.AddTransition(returnToSpawnPosState, chaseState, new PredTransition<MonsterAContext>(
+                context => context.target != null && context.considerPlayerAsEnemy,
+                "Find Target While Returning"
                 ));
 
             // 追逐状态 -> 破门状态
