@@ -17,11 +17,36 @@ namespace GameJam26.Enemy
             var breakDoorState = new MonsterABreakDoorState();
             var knockbackState = new MonsterAKnockbackState();
             var returnToSpawnPosState = new MonsterAReturnToSpawnPosState();
+            var specialChaseState = new MonsterASpecialChaseState();
 
             // 任意状态 -> 击退状态
             fsm.AddAnyTransition(knockbackState, new PredTransition<MonsterAContext>(
                 context => context.isKnockback,
                 "Get Knockback"
+                ));
+
+            // 巡逻状态 -> 收到Player佩戴面具的通知，进入特殊追逐状态
+            fsm.AddTransition(patrolState, specialChaseState, new PredTransition<MonsterAContext>(
+                context => context.maskBTarget != null && context.isMaskBActive,
+                "Player Wears Mask B While Patrolling"
+                ));
+
+            // 回到起始点 -> 特殊追逐状态
+            fsm.AddTransition(returnToSpawnPosState, specialChaseState, new PredTransition<MonsterAContext>(
+                context => context.maskBTarget != null && context.isMaskBActive,
+                "Player Wears Mask B While Returning"
+                ));
+
+            // 特殊追逐状态 -> 回到起始点
+            fsm.AddTransition(specialChaseState, returnToSpawnPosState, new PredTransition<MonsterAContext>(
+                context => !context.isMaskBActive || context.maskBTarget == null,
+                "Player Removes Mask B While Special Chasing"
+                ));
+
+            // 特殊追逐状态 -> 追逐状态
+            fsm.AddTransition(specialChaseState, chaseState, new PredTransition<MonsterAContext>(
+                context => context.hasLineOfSight && context.considerPlayerAsEnemy && context.target != null,
+                "See Player While Special Chasing"
                 ));
 
             // 巡逻状态 -> 追逐状态

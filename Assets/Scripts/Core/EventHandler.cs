@@ -7,5 +7,17 @@ public static class EventHandler
     {
         InstantiateMonsterFace?.Invoke(monsterFace);
     }
+
+    public static event Action<Transform> NotifyActiveMaskB;
+    public static void CallNotifyActiveMaskB(Transform player)
+    {
+        NotifyActiveMaskB?.Invoke(player);
+    }
+
+    public static event Action<Transform> NotifyDeactiveMaskB;
+    public static void CallNotifyDeactiveMaskB(Transform player)
+    {
+        NotifyDeactiveMaskB?.Invoke(player);
+    }
 }
 

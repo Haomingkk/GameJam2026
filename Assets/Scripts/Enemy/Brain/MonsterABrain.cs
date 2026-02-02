@@ -47,6 +47,33 @@ namespace GameJam26.Enemy
             _fsm = MonsterAFSMBuilder.Build(_context);
         }
 
+        private void OnEnable()
+        {
+            EventHandler.NotifyActiveMaskB += _OnNotifyActiveMaskB;
+            EventHandler.NotifyDeactiveMaskB += _OnNotifyDeactiveMaskB;
+        }
+        private void OnDisable()
+        {
+            EventHandler.NotifyActiveMaskB -= _OnNotifyActiveMaskB;
+            EventHandler.NotifyDeactiveMaskB -= _OnNotifyDeactiveMaskB;
+        }
+
+        private void _OnNotifyActiveMaskB(Transform player)
+        {
+            float sqrDistance = (player.position - transform.position).sqrMagnitude;
+            if (sqrDistance < _context.Config.maskBTriggerMonsterADistance * _context.Config.maskBTriggerMonsterADistance)
+            {
+                _context.isMaskBActive = true;
+                _context.maskBTarget = player;
+            }
+        }
+
+        private void _OnNotifyDeactiveMaskB(Transform player)
+        {
+            _context.isMaskBActive = false;
+            _context.maskBTarget = null;
+        }
+
         private void Update()
         {
             _context.currentTime = Time.time;
@@ -102,6 +129,8 @@ namespace GameJam26.Enemy
                 _StartKnockback(-dirToPlayer);
             }
         }
+
+
 
         private void _StartKnockback(Vector2 directionAwayFromPlayer)
         {
