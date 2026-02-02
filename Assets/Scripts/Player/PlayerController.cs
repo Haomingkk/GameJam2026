@@ -4,10 +4,12 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 namespace GameJam2026.GamePlay
 {
@@ -48,9 +50,11 @@ namespace GameJam2026.GamePlay
         [SerializeField] GameObject _normalSight;
         [SerializeField] GameObject _maskDSight;
         [SerializeField] GameObject _energyCollectSightRange;
+
         [Header("Interactive Range")]
         [SerializeField] InteractiveRange _interactiveRange;
         private bool _calculatingNearInteractable = true;
+
         [Header("Mask Status")]
         [SerializeField] private float _energyComsumeSpeed=0.1f;
         [SerializeField] private float _energyGatheringSpeed = 0.2f;
@@ -60,6 +64,8 @@ namespace GameJam2026.GamePlay
         private float _coinMaskDGatherTimer;
         private int _isGartheringEnergy;
 
+        [Header("Player Audio")]
+        [SerializeField] private PlayerAudioController _audioController;
         public MaskState maskState { get; private set; }
 
 
@@ -131,6 +137,7 @@ namespace GameJam2026.GamePlay
                 {
                     _playerState = PlayerState.Move;
                     _animator.SetBool("isWalking",true);
+                    
                 } 
             }
             else
@@ -186,13 +193,14 @@ namespace GameJam2026.GamePlay
             {
                 if (maskState != MaskState.MaskB && watchingPlayerNum != 0)
                 {
-                    _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed * _watchingModifier;
+                    _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed * _watchingModifier; 
                 }
                 else
                 {
                     _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed;
                 }
-               
+                if (_moveInput.x != 0 || _moveInput.y != 0) { _audioController.PlayerWalk(); }
+
                 //Debug.Log($"Player is moving in {_rb2D.linearVelocity} speed");
             }
             
@@ -204,7 +212,7 @@ namespace GameJam2026.GamePlay
             else if (move.x < -0.01f)
                 _animator.SetBool("isFacingLeft", true);
         }
-         
+      
         private void _StartKnockback(Vector2 direction)
         {
             if (_knockbackRoutine != null)
@@ -238,7 +246,11 @@ namespace GameJam2026.GamePlay
         private void _ToggleMask(MaskState target)
         {
             if (maskState == target)
-            { maskState = MaskState.None; _playerMask.sprite = null; }
+            {
+                if (maskState == MaskState.MaskB) { EventHandler.CallNotifyDeactiveMaskB(transform); }
+                maskState = MaskState.None; _playerMask.sprite = null; 
+                
+            }
             else if ((target == MaskState.InvalidMaskA && maskState == MaskState.MaskA) || (target == MaskState.MaskA && maskState == MaskState.InvalidMaskA))
             {
                 maskState = MaskState.None;
@@ -248,7 +260,7 @@ namespace GameJam2026.GamePlay
             { 
                 maskState = target;
                 if (maskState == MaskState.MaskA || maskState == MaskState.InvalidMaskA) { _playerMask.sprite = _maskSpriteImage[0]; }
-                else if (maskState == MaskState.MaskB) { _playerMask.sprite = _maskSpriteImage[1]; }
+                else if (maskState == MaskState.MaskB) { _playerMask.sprite = _maskSpriteImage[1];EventHandler.CallNotifyActiveMaskB(transform); }
                 else if (maskState == MaskState.MaskD) 
                 {
                     _playerMask.sprite = _maskSpriteImage[2];
@@ -389,10 +401,13 @@ namespace GameJam2026.GamePlay
         
         }
         private IEnumerator _DieRoutine() {
+            
             _isPlayerinControl = false;
             _isAllowToMove = false;
             _playerState = PlayerState.Die;
+            _audioController.PlayerFail();
             yield return new WaitForSeconds(_dieAnimationLength);
+            SceneManager.LoadScene(1);
         }
         private IEnumerator _KnockbackRoutine(Vector2 direction)
         {
