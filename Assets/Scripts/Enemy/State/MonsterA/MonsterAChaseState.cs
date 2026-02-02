@@ -23,6 +23,11 @@ namespace GameJam26.Enemy
 
         public void Tick(MonsterAContext context, float deltaTime)
         {
+            if (context.target == null)
+            {
+                Debug.Log("MonsterAChaseState Tick called but target is null");
+                return;
+            }
             Vector3 targetPos = context.target.position;
             //Debug.Log("Chasing target at position: " + targetPos);
             context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, deltaTime);

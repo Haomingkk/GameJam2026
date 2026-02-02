@@ -7,6 +7,7 @@ namespace GameJam26.Enemy
     {
         [Header("Patrol")]
         public float patrolSpeed = 0f;
+        public float patrolMoveStopDistance = 0.2f;// 走到点多近算到达
         [Header("Chase")]
         public float chaseSpeed = 5.0f;
         public float senseDistance = 8.0f;         // 视野距离
