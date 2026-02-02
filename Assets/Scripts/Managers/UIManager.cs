@@ -18,15 +18,15 @@ namespace GameJam2026.UI {
         private float _maxBarWidth;
         private void Awake()
         {
-
-            if (instance != null)
+            if (instance != null && instance != this)
+            {
                 Destroy(gameObject);
-            else
-                instance = this;
+                return;
+            }
+            instance = this;
+
             _maxBarWidth = _energyBarMask.rectTransform.rect.width;
-            _UpdateUICoin(0);
-            _UpdateMask();
-            _UpDateUIEnegryBar(1);
+
         }
         private void Start()
         {
@@ -37,13 +37,11 @@ namespace GameJam2026.UI {
                 PlayerController.instance.OnMaskStateUpdate += _UpdateMask;
                 PlayerController.instance.OnCoinUpdate += _UpdateUICoin;
             }
+           
         }
         private void OnEnable()
         {
-            PlayerController.instance.OnEnergyUpdate += _UpDateUIEnegryBar;
-            PlayerController.instance.OnHealthUpdate += _UpdateUIHealth;
-            PlayerController.instance.OnMaskStateUpdate += _UpdateMask;
-            PlayerController.instance.OnCoinUpdate += _UpdateUICoin;
+  
         }
         private void OnDisable()
         {
