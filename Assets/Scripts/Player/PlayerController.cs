@@ -407,7 +407,7 @@ namespace GameJam2026.GamePlay
             _playerState = PlayerState.Die;
             _audioController.PlayerFail();
             yield return new WaitForSeconds(_dieAnimationLength);
-            SceneManager.LoadScene(1);
+            SceneManager.LoadScene(0);
         }
         private IEnumerator _KnockbackRoutine(Vector2 direction)
         {

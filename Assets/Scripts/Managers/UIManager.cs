@@ -120,8 +120,10 @@ namespace GameJam2026.UI {
             }
         private IEnumerator _ScareFaceRoutine(Sprite mask) {
             _scareFaceUI.sprite = mask;
+            _scareFaceUI.color = Color.white;
             yield return new WaitForSeconds(_scareFaceTime);
             _scareFaceUI.sprite = null;
+            _scareFaceUI.color = Color.clear;
         }
 
     }
