@@ -16,7 +16,7 @@ MonoBehaviour:
   patrolIdleDuration: 5
   patrolRadius: 5
   patrolMoveStopDistance: 0.2
-  chaseSpeed: 5
+  chaseSpeed: 1
   senseDistance: 8
   stopDistance: 0.1
   lostTargetTimeout: 2

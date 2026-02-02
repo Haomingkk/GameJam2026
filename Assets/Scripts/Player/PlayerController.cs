@@ -47,6 +47,7 @@ namespace GameJam2026.GamePlay
         [Header("Player Sight")]
         [SerializeField] GameObject _normalSight;
         [SerializeField] GameObject _maskDSight;
+        [SerializeField] GameObject _energyCollectSightRange;
         [Header("Interactive Range")]
         [SerializeField] InteractiveRange _interactiveRange;
         private bool _calculatingNearInteractable = true;
@@ -54,6 +55,8 @@ namespace GameJam2026.GamePlay
         [SerializeField] private float _energyComsumeSpeed=0.1f;
         [SerializeField] private float _energyGatheringSpeed = 0.2f;
         [SerializeField] private float _coinMaskDGatherTime = 1.0f;
+        [SerializeField] private SpriteRenderer _playerMask;
+        [SerializeField] private Sprite[] _maskSpriteImage = new Sprite [3];
         private float _coinMaskDGatherTimer;
         private int _isGartheringEnergy;
 
@@ -181,7 +184,7 @@ namespace GameJam2026.GamePlay
             }
             else
             {
-                if (maskState != MaskState.MaskA && watchingPlayerNum != 0)
+                if (maskState != MaskState.MaskB && watchingPlayerNum != 0)
                 {
                     _rb2D.linearVelocity = _moveInput.normalized * _walkSpeed * _watchingModifier;
                 }
@@ -235,15 +238,20 @@ namespace GameJam2026.GamePlay
         private void _ToggleMask(MaskState target)
         {
             if (maskState == target)
-            { maskState = MaskState.None; }
+            { maskState = MaskState.None; _playerMask.sprite = null; }
             else if ((target == MaskState.InvalidMaskA && maskState == MaskState.MaskA) || (target == MaskState.MaskA && maskState == MaskState.InvalidMaskA))
             {
                 maskState = MaskState.None;
+                _playerMask.sprite = null;
             }
             else if (_energy > 0 || maskState == MaskState.MaskD) 
             { 
                 maskState = target;
-                if (maskState == MaskState.MaskD) {
+                if (maskState == MaskState.MaskA || maskState == MaskState.InvalidMaskA) { _playerMask.sprite = _maskSpriteImage[0]; }
+                else if (maskState == MaskState.MaskB) { _playerMask.sprite = _maskSpriteImage[1]; }
+                else if (maskState == MaskState.MaskD) 
+                {
+                    _playerMask.sprite = _maskSpriteImage[2];
                     _SwitchToMaskDSight();
                     OnMaskStateUpdate?.Invoke();
                     return;
@@ -263,6 +271,7 @@ namespace GameJam2026.GamePlay
             else if (maskState == MaskState.InvalidMaskA) { maskState = MaskState.MaskA; }
             Debug.Log($"Player Switch to mask {maskState} now!");
         }
+      
         private void _UpdateViewDirection(Vector2 move)
         {
             if (move.sqrMagnitude < 0.001f)
@@ -272,6 +281,7 @@ namespace GameJam2026.GamePlay
             float angle = Mathf.Atan2(move.y, move.x) * Mathf.Rad2Deg;
             angle = Mathf.Round(angle / 45f) * 45f;
             _maskDSight.transform.rotation = Quaternion.Euler(0f, 0f, angle);
+            _energyCollectSightRange.transform.rotation = Quaternion.Euler(0f, 0f, angle+180);
         }
         private void _UpdateMaskEnergy() {
             if (maskState == MaskState.None) { return; }
@@ -298,7 +308,7 @@ namespace GameJam2026.GamePlay
         private void _UpdateCoin(int amount) {
             if (amount > 0) {
                 _coin = Math.Min(_coin + amount, _maxCoin);
-                Debug.Log($"Coin {amount}");
+                //Debug.Log($"Coin {amount}");
                 OnCoinUpdate?.Invoke(_coin);
             }
         }
