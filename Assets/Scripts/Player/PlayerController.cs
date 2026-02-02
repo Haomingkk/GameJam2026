@@ -9,6 +9,7 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 
 namespace GameJam2026.GamePlay
 {
@@ -211,7 +212,7 @@ namespace GameJam2026.GamePlay
             else if (move.x < -0.01f)
                 _animator.SetBool("isFacingLeft", true);
         }
-         
+      
         private void _StartKnockback(Vector2 direction)
         {
             if (_knockbackRoutine != null)
@@ -245,7 +246,11 @@ namespace GameJam2026.GamePlay
         private void _ToggleMask(MaskState target)
         {
             if (maskState == target)
-            { maskState = MaskState.None; _playerMask.sprite = null; }
+            {
+                if (maskState == MaskState.MaskB) { EventHandler.CallNotifyDeactiveMaskB(transform); }
+                maskState = MaskState.None; _playerMask.sprite = null; 
+                
+            }
             else if ((target == MaskState.InvalidMaskA && maskState == MaskState.MaskA) || (target == MaskState.MaskA && maskState == MaskState.InvalidMaskA))
             {
                 maskState = MaskState.None;
@@ -255,7 +260,7 @@ namespace GameJam2026.GamePlay
             { 
                 maskState = target;
                 if (maskState == MaskState.MaskA || maskState == MaskState.InvalidMaskA) { _playerMask.sprite = _maskSpriteImage[0]; }
-                else if (maskState == MaskState.MaskB) { _playerMask.sprite = _maskSpriteImage[1]; }
+                else if (maskState == MaskState.MaskB) { _playerMask.sprite = _maskSpriteImage[1];EventHandler.CallNotifyActiveMaskB(transform); }
                 else if (maskState == MaskState.MaskD) 
                 {
                     _playerMask.sprite = _maskSpriteImage[2];
@@ -402,6 +407,7 @@ namespace GameJam2026.GamePlay
             _playerState = PlayerState.Die;
             _audioController.PlayerFail();
             yield return new WaitForSeconds(_dieAnimationLength);
+            SceneManager.LoadScene(1);
         }
         private IEnumerator _KnockbackRoutine(Vector2 direction)
         {
