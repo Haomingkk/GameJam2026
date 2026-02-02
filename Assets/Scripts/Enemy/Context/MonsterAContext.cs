@@ -36,6 +36,11 @@ namespace GameJam26.Enemy
         public float nextBumpTime;
         public float knockbackSpeed;
 
+        // 面具B相关
+        public bool isMaskBActive;
+        public Transform maskBTarget;
+
+
         public MonsterAContext(Transform root, Animator animator, MonsterAConfig config, IActorMotor2D motor)
         {
             Root = root;
