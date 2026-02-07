@@ -15,6 +15,8 @@ namespace GameJam26.Enemy
         private MonsterAConfig config;
         [SerializeField]
         private Transform _chaseTarget;     // 追逐目标(玩家)
+        [SerializeField]
+        private Transform _rangeVisual;     // 侦查范围显示
 
 
         private MonsterAContext _context;
@@ -43,6 +45,7 @@ namespace GameJam26.Enemy
                 spawnPos = transform.position,
                 nextBumpTime = Time.time,
                 knockbackSpeed = config.knockbackDistance / config.knockbackDuration,
+                rangeVisual = _rangeVisual,
             };
 
             _fsm = MonsterAFSMBuilder.Build(_context);
@@ -109,6 +112,10 @@ namespace GameJam26.Enemy
             }
             else if (collision.CompareTag("Player"))
             {
+                if (!_context.considerPlayerAsEnemy)
+                {
+                    return;
+                }
                 if (Time.time < _context.nextBumpTime)
                 {
                     return;

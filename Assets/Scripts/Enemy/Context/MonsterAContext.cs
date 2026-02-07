@@ -25,6 +25,9 @@ namespace GameJam26.Enemy
         // 移动能力
         public IActorMotor2D Motor { get; }
 
+        // 侦查范围显示
+        public Transform rangeVisual;
+
         // 门交互
         public Door currentDoor;
         public bool shouldBreakDoor;

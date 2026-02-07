@@ -17,6 +17,11 @@ namespace GameJam26.Enemy
         public void Tick(MonsterAContext context, float deltaTime)
         {
             Vector2 currentDir = context.Motor.GetCurrentVelocity();
+            // ÊÓÒ°·¶Î§ÏÔÊ¾
+            float degreeFromRight = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
+            float z = degreeFromRight - 90f;
+            context.rangeVisual.rotation = Quaternion.Euler(0f, 0f, z);
+
             if (currentDir.sqrMagnitude > 0.01f)
             {
                 currentDir.y = 0;

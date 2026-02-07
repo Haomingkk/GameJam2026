@@ -32,6 +32,9 @@ namespace GameJam26.Enemy
                     context.currentDirection = speed.y > 0 ? FaceDirection.Up : FaceDirection.Down;
                 }
             }
+            float degreeFromRight = Mathf.Atan2(context.CurrentDirection.y, context.CurrentDirection.x) * Mathf.Rad2Deg;
+            float z = degreeFromRight - 90f;
+            context.rangeVisual.rotation = Quaternion.Euler(0f, 0f, z);
             context.Motor.Stop();
             context.AnimDriver.EnterIdle(context.CurrentDirection);
         }
@@ -45,6 +48,11 @@ namespace GameJam26.Enemy
                 context.lastChangeDirectionTime = context.currentTime;
                 context.currentDirection = (FaceDirection)(((int)context.currentDirection + 1) % context.Config.directionCount);
                 context.AnimDriver.EnterIdle(context.CurrentDirection);
+
+                // 更新视觉范围方向
+                float degreeFromRight = Mathf.Atan2(context.CurrentDirection.y, context.CurrentDirection.x) * Mathf.Rad2Deg;
+                float z = degreeFromRight - 90f;
+                context.rangeVisual.rotation = Quaternion.Euler(0f, 0f, z);
             }
         }
 
