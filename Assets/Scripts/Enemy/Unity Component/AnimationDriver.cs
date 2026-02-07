@@ -3,7 +3,7 @@ namespace GameJam26.Enemy
 {
     public interface IAnimationDriver
     {
-        void EnterIdle();
+        void EnterIdle(Vector2 dir);
         void EnterMove(Vector2 dir);
         void EnterAttack();
         void SetMoveDir(Vector2 dir);
@@ -21,9 +21,13 @@ namespace GameJam26.Enemy
         private static readonly int MoveY = Animator.StringToHash("MoveY");
         private static readonly int Attack = Animator.StringToHash("Attack");
 
-        public void EnterIdle()
+        public void EnterIdle(Vector2 dir)
         {
             _anim.SetBool(Move, false);
+            if (dir != Vector2.zero)
+            {
+                SetMoveDir(dir);
+            }
         }
 
         public void EnterMove(Vector2 dir)

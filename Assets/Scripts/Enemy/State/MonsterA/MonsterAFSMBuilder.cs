@@ -18,6 +18,7 @@ namespace GameJam26.Enemy
             var knockbackState = new MonsterAKnockbackState();
             var returnToSpawnPosState = new MonsterAReturnToSpawnPosState();
             var specialChaseState = new MonsterASpecialChaseState();
+            var idleState = new MonsterAIdleState();
 
             // 任意状态 -> 击退状态
             fsm.AddAnyTransition(knockbackState, new PredTransition<MonsterAContext>(
@@ -55,10 +56,22 @@ namespace GameJam26.Enemy
                 "Find Target"
                 ));
 
-            // 追逐状态 -> 回到起始点
-            fsm.AddTransition(chaseState, returnToSpawnPosState, new PredTransition<MonsterAContext>(
+            // 追逐状态 -> 原地Idle状态(只持续短暂几秒)
+            fsm.AddTransition(chaseState, idleState, new PredTransition<MonsterAContext>(
                 context => !context.considerPlayerAsEnemy || (context.target == null && (context.currentTime - context.lastSeePlayerTime) >= context.Config.lostTargetTimeout),
                 "Lose Target"
+                ));
+
+            // 原地Idle状态 -> 回到起始点
+            fsm.AddTransition(idleState, returnToSpawnPosState, new PredTransition<MonsterAContext>(
+                context => context.currentTime - context.enterIdleTime >= context.Config.idleAfterLostTargetTimeout,
+                "Finish Idle and Return to Spawn Position"
+                ));
+
+            // 原地Idle状态 -> 追逐状态
+            fsm.AddTransition(idleState, chaseState, new PredTransition<MonsterAContext>(
+                context => context.target != null && context.considerPlayerAsEnemy,
+                "Find Target While Idling"
                 ));
 
             // 回到起始点 -> 巡逻状态
