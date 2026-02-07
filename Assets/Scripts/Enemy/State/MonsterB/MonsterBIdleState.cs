@@ -1,3 +1,4 @@
+using UnityEngine;
 using GameJam26.FSM;
 
 namespace GameJam26.Enemy
@@ -9,7 +10,7 @@ namespace GameJam26.Enemy
         {
             context.Motor.Stop();
             context.patrolIdleEndTime = context.currentTime + context.Config.patrolIdleDuration;
-            context.animationDriver.EnterIdle();
+            context.animationDriver.EnterIdle(Vector2.zero);
         }
         public void Tick(MonsterBContext context, float deltaTime) { }
         public void OnExit(MonsterBContext context) { }

@@ -9,7 +9,7 @@ namespace GameJam26.Enemy
 
         public void OnEnter(MonsterAContext context)
         {
-            context.animationDriver.EnterAttack();
+            context.AnimDriver.EnterAttack();
             context.Motor.Stop();
             context.doorBreakEndTime = context.currentTime + context.Config.doorBreakDuration;
         }

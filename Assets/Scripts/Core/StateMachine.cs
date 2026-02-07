@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace GameJam26.FSM
 {
@@ -69,6 +70,7 @@ namespace GameJam26.FSM
         {
             if (_TryGetNext(context, out var next, out var reason))
             {
+                Debug.Log($"StateMachine Transition: {Current?.Name} -> {next?.Name} because {reason}");
                 _SwitchTo(next, context, reason);
             }
             Current?.Tick(context, deltaTime);

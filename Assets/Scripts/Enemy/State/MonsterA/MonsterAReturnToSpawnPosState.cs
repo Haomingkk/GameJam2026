@@ -10,7 +10,7 @@ namespace GameJam26.Enemy
         public void OnEnter(MonsterAContext context)
         {
             context.Motor.Stop();
-            context.animationDriver.EnterMove(Vector2.zero);
+            context.AnimDriver.EnterMove(Vector2.zero);
             context.Motor.MoveTowards(context.spawnPos, context.Config.patrolSpeed, 0f);
         }
 
@@ -21,7 +21,7 @@ namespace GameJam26.Enemy
             {
                 currentDir.y = 0;
                 currentDir.x = currentDir.x > 0 ? 1 : -1;
-                context.animationDriver.SetMoveDir(currentDir);
+                context.AnimDriver.SetMoveDir(currentDir);
             }
         }
 

@@ -7,12 +7,15 @@ namespace GameJam26.Enemy
     {
         [Header("Patrol")]
         public float patrolSpeed = 0f;
-        public float patrolMoveStopDistance = 0.2f;// 走到点多近算到达
+        public float patrolMoveStopDistance = 0.2f;         // 走到点多近算到达
+        public float patrolChangeDirectionInterval = 3.0f;  // 多久换一次方向
+        public int directionCount = 4;                      // 巡逻方向数量
         [Header("Chase")]
         public float chaseSpeed = 5.0f;
         public float senseDistance = 8.0f;                  // 视野距离
         public float stopDistance = 0.1f;                   // 追逐时与目标的最小距离
         public float lostTargetTimeout = 2.0f;              // 失去目标后，放弃追逐的时间
+        public float idleAfterLostTargetTimeout = 2.0f;     // 放弃追逐后，停下来观察的时间
         public float doorBreakDuration = 3.0f;              // 破门所需时间
         public float maskBTriggerMonsterADistance = 15.0f;  // 戴面具B触发MonsterA开始追逐的直线距离
         [Header("Knockback")]

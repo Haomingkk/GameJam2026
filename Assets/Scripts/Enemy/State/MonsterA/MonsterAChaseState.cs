@@ -18,7 +18,7 @@ namespace GameJam26.Enemy
             Vector2 currentDir = context.Motor.GetCurrentVelocity();
             currentDir.y = 0;
             currentDir.x = currentDir.x > 0 ? 1 : -1;
-            context.animationDriver.EnterMove(currentDir);
+            context.AnimDriver.EnterMove(currentDir);
         }
 
         public void Tick(MonsterAContext context, float deltaTime)
@@ -34,7 +34,7 @@ namespace GameJam26.Enemy
             Vector2 currentDir = context.Motor.GetCurrentVelocity();
             currentDir.y = 0;
             currentDir.x = currentDir.x > 0 ? 1 : -1;
-            context.animationDriver.SetMoveDir(currentDir);
+            context.AnimDriver.SetMoveDir(currentDir);
         }
 
         public void OnExit(MonsterAContext context)

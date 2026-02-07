@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.AI;
 using GameJam2026.GamePlay;
 using GameJam26.FSM;
+using GameJam26.Core;
 
 namespace GameJam26.Enemy
 {
@@ -138,21 +139,35 @@ namespace GameJam26.Enemy
 
         private bool _SensePlayer()
         {
-            int maskLayer = ~(LayerMask.GetMask("Monster"));
-            RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance, maskLayer);
-            //if (hit.collider == null)
-            //{
-            //   Debug.Log("No collider hit");
-            //}else
-            //{
-            //   Debug.Log("Hit collider: " + hit.collider.name);
-            //}
-            Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
-            if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
+            if (_fsm.Current.Name == "Chase" || _fsm.Current.Name == "Special Chase")
             {
-                return true;
+                int maskLayer = ~(LayerMask.GetMask("Monster"));
+                RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance, maskLayer);
+                Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
+                if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
+                {
+                    return true;
+                }
             }
-            return false;
+            else if (_fsm.Current.Name == "Patrol" || _fsm.Current.Name == "Idle")
+            {
+                Vector2 playerDirection = (_chaseTarget.position - _context.Root.position).normalized;
+                Vector2 monsterForward = MonsterAContext.DirVec[(int)_context.currentDirection];
+                bool lessThan45Deg = Vector2.Dot(monsterForward, playerDirection) >= Consts.Cos45;
+                // 如果和当前面朝方向夹角小于45度，则进行视线检测
+                if (lessThan45Deg)
+                {
+                    int maskLayer = ~(LayerMask.GetMask("Monster"));
+                    RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance, maskLayer);
+                    Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
+                    if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+                return false;
         }
     }
 }

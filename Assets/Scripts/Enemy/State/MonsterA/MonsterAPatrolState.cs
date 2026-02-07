@@ -13,12 +13,39 @@ namespace GameJam26.Enemy
         public void OnEnter(MonsterAContext context)
         {
             Debug.Log("MonsterA Entering Patrol State");
-            context.animationDriver.EnterIdle();
+            context.lastChangeDirectionTime = context.currentTime;
+            var speed = context.Motor.GetCurrentVelocity();
+            if (speed.sqrMagnitude < 1e-4f)
+            {
+                context.currentDirection = FaceDirection.Down;
+            }
+            else
+            {
+                float ax = Mathf.Abs(speed.x);
+                float ay = Mathf.Abs(speed.y);
+                if (ax >= ay)
+                {
+                    context.currentDirection = speed.x > 0 ? FaceDirection.Right : FaceDirection.Left;
+                }
+                else
+                {
+                    context.currentDirection = speed.y > 0 ? FaceDirection.Up : FaceDirection.Down;
+                }
+            }
+            context.Motor.Stop();
+            context.AnimDriver.EnterIdle(context.CurrentDirection);
         }
 
         public void Tick(MonsterAContext context, float deltaTime)
         {
-            //Debug.Log("Patrolling at position: " + context.Root.position);
+            var timeSinceLastChange = context.currentTime - context.lastChangeDirectionTime;
+            if (timeSinceLastChange >= context.Config.patrolChangeDirectionInterval)
+            {
+                // 改变方向
+                context.lastChangeDirectionTime = context.currentTime;
+                context.currentDirection = (FaceDirection)(((int)context.currentDirection + 1) % context.Config.directionCount);
+                context.AnimDriver.EnterIdle(context.CurrentDirection);
+            }
         }
 
         public void OnExit(MonsterAContext context)
