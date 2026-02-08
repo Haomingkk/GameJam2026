@@ -156,7 +156,7 @@ namespace GameJam26.Enemy
                     return true;
                 }
             }
-            else if (_fsm.Current.Name == "Patrol" || _fsm.Current.Name == "Idle")
+            else if (_fsm.Current.Name == "Patrol" || _fsm.Current.Name == "Idle" || _fsm.Current.Name == "ReturnToSpawnPos")
             {
                 Vector2 playerDirection = (_chaseTarget.position - _context.Root.position).normalized;
                 Vector2 monsterForward = MonsterAContext.DirVec[(int)_context.currentDirection];
