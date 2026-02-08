@@ -19,5 +19,17 @@ public static class EventHandler
     {
         NotifyDeactiveMaskB?.Invoke(player);
     }
+
+    public static event Action MonsterChaseEnter;
+    public static void CallMonsterChaseEnter()
+    {
+        MonsterChaseEnter?.Invoke();
+    }
+
+    public static event Action MonsterChaseExit;
+    public static void CallMonsterChaseExit()
+    {
+        MonsterChaseExit?.Invoke();
+    }
 }
 

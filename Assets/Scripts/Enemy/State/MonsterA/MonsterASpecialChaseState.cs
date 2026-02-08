@@ -14,6 +14,7 @@ namespace GameJam26.Enemy
                 Debug.Log("MonsterASpecialChaseState OnEnter called but maskBTarget is null");
                 return;
             }
+            EventHandler.CallMonsterChaseEnter();
             context.Motor.MoveTowards(context.maskBTarget.position, context.Config.chaseSpeed, 0f);
             Vector2 currentDir = context.Motor.GetCurrentVelocity();
             currentDir.y = 0;
@@ -39,6 +40,7 @@ namespace GameJam26.Enemy
 
         public void OnExit(MonsterAContext context)
         {
+            EventHandler.CallMonsterChaseExit();
             context.maskBTarget = null;
             context.Motor.Stop();
         }

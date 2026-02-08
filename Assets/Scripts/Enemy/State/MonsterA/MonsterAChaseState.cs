@@ -17,6 +17,7 @@ namespace GameJam26.Enemy
                 Debug.Log("MonsterAChaseState OnEnter called but target is null");
                 return;
             }
+            EventHandler.CallMonsterChaseEnter();
             Vector3 targetPos = context.target.position;
 
 
@@ -51,6 +52,7 @@ namespace GameJam26.Enemy
 
         public void OnExit(MonsterAContext context)
         {
+            EventHandler.CallMonsterChaseExit();
             context.target = null;
             context.Motor.Stop();
         }
