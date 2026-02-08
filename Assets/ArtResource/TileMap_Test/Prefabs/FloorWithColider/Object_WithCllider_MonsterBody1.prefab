@@ -81,7 +81,7 @@ SpriteRenderer:
   m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 162441695
   m_SortingLayer: 3
-  m_SortingOrder: 5
+  m_SortingOrder: 2
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f21f7c4f907ea1b40b66f2b0d318e968, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -158,10 +158,10 @@ MonoBehaviour:
   - {x: 0.515625, y: -0.375, z: 0}
   m_ShapePathHash: 0
   m_InstanceId: 0
-  m_ShadowShape2DComponent: {fileID: 6600023197656304378}
+  m_ShadowShape2DComponent: {fileID: 0}
   m_ShadowShape2DProvider:
-    rid: 7240894498122235975
-  m_ShadowCastingSource: 2
+    rid: -2
+  m_ShadowCastingSource: 1
   m_ShadowMesh:
     m_Mesh: {fileID: 0}
     m_LocalBounds:
@@ -180,6 +180,5 @@ MonoBehaviour:
   references:
     version: 2
     RefIds:
-    - rid: 7240894498122235975
-      type: {class: ShadowShape2DProvider_Collider2D, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
-      data: 
+    - rid: -2
+      type: {class: , ns: , asm: }
