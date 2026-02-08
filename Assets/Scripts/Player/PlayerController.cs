@@ -1,4 +1,5 @@
 
+using GameJam2026.UI;
 using GameJam26;
 using System;
 using System.Collections;
@@ -406,6 +407,7 @@ namespace GameJam2026.GamePlay
             _isAllowToMove = false;
             _playerState = PlayerState.Die;
             _audioController.PlayerFail();
+            UIManager.instance.ShowDeathInfo();
             yield return new WaitForSeconds(_dieAnimationLength);
             SceneManager.LoadScene(0);
         }
