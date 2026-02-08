@@ -15,6 +15,7 @@ namespace GameJam26.Enemy
                 Debug.LogWarning("MonsterBChaseState OnEnter called but target is null");
                 return;
             }
+            EventHandler.CallMonsterChaseEnter();
             Vector3 targetPos = context.target.position;
 
             context.Motor.MoveTowards(targetPos, context.Config.chaseSpeed, 0f);
@@ -42,6 +43,7 @@ namespace GameJam26.Enemy
         {
             context.target = null;
             context.Motor.Stop();
+            EventHandler.CallMonsterChaseExit();
             Debug.Log("MonsterB Exiting Chase State");
         }
     }

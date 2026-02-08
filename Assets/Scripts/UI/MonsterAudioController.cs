@@ -5,12 +5,25 @@ public class MonsterAudioController : MonoBehaviour
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private AudioClip[] audioClips;
 
-[SerializeField] private AudioClip attackClip;
+    [SerializeField] private AudioClip attackClip;
     [SerializeField] private float range = 10f;
     [SerializeField] private float playInterval = 2f;
 
     private Transform playerTransform;
     private float playTimer;
+    private int chaseCount;
+
+    private void OnEnable()
+    {
+        EventHandler.MonsterChaseEnter += HandleChaseEnter;
+        EventHandler.MonsterChaseExit += HandleChaseExit;
+    }
+
+    private void OnDisable()
+    {
+        EventHandler.MonsterChaseEnter -= HandleChaseEnter;
+        EventHandler.MonsterChaseExit -= HandleChaseExit;
+    }
 
     void Start()
     {
@@ -48,6 +61,31 @@ public class MonsterAudioController : MonoBehaviour
         {
             playTimer = 0f;
         }
+    }
+
+    private void HandleChaseEnter()
+    {
+        chaseCount++;
+        UpdateBackgroundState();
+    }
+
+    private void HandleChaseExit()
+    {
+        chaseCount = Mathf.Max(0, chaseCount - 1);
+        UpdateBackgroundState();
+    }
+
+    private void UpdateBackgroundState()
+    {
+        if (BackgroundAudioController.Instance == null)
+        {
+            return;
+        }
+
+        var state = chaseCount > 0
+            ? BackgroundAudioController.AudioState.Chasing
+            : BackgroundAudioController.AudioState.Normal;
+        BackgroundAudioController.Instance.SetState(state);
     }
 
     private void PlayRandomAudio()

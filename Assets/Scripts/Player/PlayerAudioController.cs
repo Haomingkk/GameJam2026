@@ -12,13 +12,11 @@ public class PlayerAudioController : MonoBehaviour
     [SerializeField] float minInterval = 1f;   // very close
     [SerializeField] float maxInterval = 5.0f;    // near edge
     [SerializeField] float distanceCheckEvery = 0.1f;
-    [SerializeField] float chasingRange = 15f; // Range to trigger chasing state
 
     GameObject[] monsters;
     float distTimer;
     float playTimer;
     float lastDist = Mathf.Infinity;
-    bool isChasing = false;
 
     void Start()
     {
@@ -34,9 +32,6 @@ public class PlayerAudioController : MonoBehaviour
         {
             distTimer = 0f;
             lastDist = DistanceToNearestMonster();
-            
-            // Update background state based on chasing range
-            UpdateBackgroundState();
         }
 
         float interval = Mathf.Lerp(minInterval, maxInterval, lastDist / radius);
@@ -49,24 +44,6 @@ public class PlayerAudioController : MonoBehaviour
         }
     }
     
-    void UpdateBackgroundState()
-    {
-        if (BackgroundAudioController.Instance == null) return;
-        
-        bool shouldBeChasing = lastDist <= chasingRange;
-        
-        if (shouldBeChasing && !isChasing)
-        {
-            isChasing = true;
-            BackgroundAudioController.Instance.SetState(BackgroundAudioController.AudioState.Chasing);
-        }
-        else if (!shouldBeChasing && isChasing)
-        {
-            isChasing = false;
-            BackgroundAudioController.Instance.SetState(BackgroundAudioController.AudioState.Normal);
-        }
-    }
-
     float DistanceToNearestMonster()
     {
         if (monsters == null || monsters.Length == 0) return Mathf.Infinity;
@@ -129,6 +106,5 @@ public class PlayerAudioController : MonoBehaviour
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireSphere(transform.position, radius);
-        Gizmos.DrawWireSphere(transform.position, chasingRange);
     }
 }
