@@ -48,8 +48,8 @@ namespace GameJam26.Enemy
                 "Find Target From Patrol"
                 ));
 
-            // 追逐状态 -> 巡逻状态
-            fsm.AddTransition(chaseState, patrolState, new PredTransition<MonsterBContext>(
+            // 追逐状态 -> 待机状态
+            fsm.AddTransition(chaseState, idleState, new PredTransition<MonsterBContext>(
                 context => !context.considerPlayerAsEnemy || (context.target == null && (context.currentTime - context.lastSeePlayerTime) >= context.Config.lostTargetTimeout),
                 "Lose Target"
                 ));
