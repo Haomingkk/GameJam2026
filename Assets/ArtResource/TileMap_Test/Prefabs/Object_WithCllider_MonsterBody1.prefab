@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 5791738955892515539}
   - component: {fileID: 6890569936829928337}
   - component: {fileID: 6600023197656304378}
+  - component: {fileID: -8350454520705070408}
   m_Layer: 0
   m_Name: Object_WithCllider_MonsterBody1
   m_TagString: Untagged
@@ -78,8 +79,8 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: -1305252581
-  m_SortingLayer: 2
+  m_SortingLayerID: 162441695
+  m_SortingLayer: 3
   m_SortingOrder: 5
   m_MaskInteraction: 0
   m_Sprite: {fileID: 21300000, guid: f21f7c4f907ea1b40b66f2b0d318e968, type: 3}
@@ -126,6 +127,59 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.010924647, y: -0.06689996}
-  m_Size: {x: 0.94697976, y: 0.6162131}
+  m_Offset: {x: -0.010924647, y: -0.25}
+  m_Size: {x: 0.94697976, y: 0.25}
   m_Direction: 1
+--- !u!114 &-8350454520705070408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2792250126510111744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7db70e0ea77f5ac47a8f4565a9406397, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.2D.Runtime::UnityEngine.Rendering.Universal.ShadowCaster2D
+  m_ShadowGroup: 0
+  m_Priority: 5
+  m_ComponentVersion: 5
+  m_HasRenderer: 1
+  m_UseRendererSilhouette: 1
+  m_CastsShadows: 1
+  m_SelfShadows: 0
+  m_AlphaCutoff: 0.1
+  m_ApplyToSortingLayers: 0000000023510e366d601ef043f82a95
+  m_ShapePath:
+  - {x: -0.515625, y: -0.375, z: 0}
+  - {x: -0.515625, y: 0.375, z: 0}
+  - {x: 0.515625, y: 0.375, z: 0}
+  - {x: 0.515625, y: -0.375, z: 0}
+  m_ShapePathHash: 0
+  m_InstanceId: 0
+  m_ShadowShape2DComponent: {fileID: 6600023197656304378}
+  m_ShadowShape2DProvider:
+    rid: 7240894498122235975
+  m_ShadowCastingSource: 2
+  m_ShadowMesh:
+    m_Mesh: {fileID: 0}
+    m_LocalBounds:
+      m_Center: {x: -0.010925293, y: -0.25, z: 0}
+      m_Extent: {x: 0.4429016, y: 0.09500122, z: 0}
+    m_EdgeProcessing: 1
+    m_TrimEdge: 0.03
+    m_FlipX: 0
+    m_FlipY: 0
+    m_InitialTrim: 0
+  m_CastingOption: 1
+  m_PreviousTrimEdge: 0.03
+  m_PreviousEdgeProcessing: 1
+  m_PreviousShadowCastingSource: 2
+  m_PreviousShadowShape2DSource: {fileID: 6600023197656304378}
+  references:
+    version: 2
+    RefIds:
+    - rid: 7240894498122235975
+      type: {class: ShadowShape2DProvider_Collider2D, ns: UnityEngine.Rendering.Universal, asm: Unity.RenderPipelines.Universal.2D.Runtime}
+      data: 
