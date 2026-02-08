@@ -25,6 +25,9 @@ namespace GameJam26.Enemy
         public bool shouldBreakDoor;
         public float doorBreakEndTime;
 
+        // 方向
+        public Vector2 currentDir;
+
         // 追逐
         public Vector2 spawnPos;
         public float lastSeePlayerTime;

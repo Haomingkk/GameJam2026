@@ -1,7 +1,8 @@
+using GameJam2026.GamePlay;
+using GameJam26.Core;
+using GameJam26.FSM;
 using UnityEngine;
 using UnityEngine.AI;
-using GameJam26.FSM;
-using GameJam2026.GamePlay;
 
 namespace GameJam26.Enemy
 {
@@ -14,6 +15,8 @@ namespace GameJam26.Enemy
         private MonsterBConfig config;
         [SerializeField]
         private Transform _chaseTarget;     // 追逐目标(玩家)
+        [SerializeField]
+        private Transform _rangeVisual;     // 侦查范围显示
 
 
         private MonsterBContext _context;
@@ -48,6 +51,18 @@ namespace GameJam26.Enemy
         private void Update()
         {
             _context.currentTime = Time.time;
+
+            // 侦查范围显示
+            var speed = _context.Motor.GetCurrentVelocity();
+            if (speed.sqrMagnitude >= 1e-3)
+            {
+                var dir = speed.normalized;
+                _context.currentDir = dir;
+                float angle = Mathf.Atan2(dir.y, dir.x) * Mathf.Rad2Deg;
+                float z = angle - 90f;
+                _rangeVisual.rotation = Quaternion.Euler(0, 0, z);
+            }
+
             bool see = _SensePlayer();
 
             if (_context.hasLineOfSight != see)
@@ -115,17 +130,19 @@ namespace GameJam26.Enemy
 
         private bool _SensePlayer()
         {
-            int maskLayer = ~(LayerMask.GetMask("Monster"));
-            RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance, maskLayer);
-            Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
-            //if (hit.collider != null)
-            //{
-            //    Debug.Log("Hit collider: " + hit.collider.name);
-            //}
-            if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
+            Vector2 playerDirection = (_chaseTarget.position - _context.Root.position).normalized;
+            Vector2 monsterForward = _context.currentDir;
+            bool lessThan45Deg = Vector2.Dot(monsterForward, playerDirection) >= Consts.Cos45;
+            if (lessThan45Deg)
             {
-                //Debug.Log("MonsterBBrain: Player sensed!");
-                return true;
+                int maskLayer = ~(LayerMask.GetMask("Monster"));
+                RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance, maskLayer);
+                Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
+                if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
+                {
+                    //Debug.Log("MonsterBBrain: Player sensed!");
+                    return true;
+                }
             }
             return false;
         }
