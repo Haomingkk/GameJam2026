@@ -20,7 +20,13 @@ namespace GameJam2026.UI {
 
         [Header("UI Effect")]
         [SerializeField] Image _scareFaceUI;
-        [SerializeField] private float _scareFaceTime = 0.5f; 
+        [SerializeField] private float _scareFaceTime = 0.5f;
+        [Header("Death Info Setting")]
+        [SerializeField] Image _deathInfoUI;
+        [SerializeField] private float _delayDeathBeforeShow = 0.5f;
+        [SerializeField] private float _startScale = 0.8f;
+        [SerializeField] private float _endScale = 1.0f;
+        [SerializeField] private float _deathInfoShowTime=2f;
 
         private float _maxBarWidth;
         private void Awake()
@@ -102,6 +108,7 @@ namespace GameJam2026.UI {
             }
 
         }
+       
         private void _UpdateUICoin(int coins) {
             coins = Mathf.Clamp(coins, 0, 9999);
 
@@ -124,6 +131,39 @@ namespace GameJam2026.UI {
             yield return new WaitForSeconds(_scareFaceTime);
             _scareFaceUI.sprite = null;
             _scareFaceUI.color = Color.clear;
+        }
+        public void ShowDeathInfo()
+        {
+            
+            StartCoroutine(DeathInfoAnimate());
+        }
+        IEnumerator DeathInfoAnimate()
+        {
+            yield return new WaitForSeconds(_delayDeathBeforeShow);
+
+            float t = 0f;
+            Color c = _deathInfoUI.color;
+            _deathInfoUI.enabled = true;
+            while (t < _deathInfoShowTime)
+            {
+                t += Time.deltaTime;
+                float p = t /_deathInfoShowTime;
+
+                
+                float eased = p * p * (3f - 2f * p);
+
+                // Scale
+                _deathInfoUI.transform.localScale = Vector3.one * Mathf.Lerp(_startScale, _endScale, eased);
+
+                // Fade
+                c.a = Mathf.Lerp(0f, 1f, eased);
+                _deathInfoUI.color = c;
+
+                yield return null;
+            }
+
+            _deathInfoUI.transform.localScale = Vector3.one * _endScale;
+            _deathInfoUI.color = Color.white;
         }
 
     }

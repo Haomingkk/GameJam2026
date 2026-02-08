@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 2047343551164421019}
   - component: {fileID: 67845509492780902}
   - component: {fileID: 2498142309232987852}
+  - component: {fileID: -1007764527595714055}
   m_Layer: 6
   m_Name: Chest - S
   m_TagString: Untagged
@@ -67,6 +68,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameJam26.Chest
   isOpen: 0
   coins: 5
+  _chestOpenSprite: {fileID: 21300000, guid: fff87341cf9b78b4d8d55cdea5441189, type: 3}
+  _spawnRadius: {x: 0.8, y: 0.8}
+  _spawnPosOffsite: 0
+  CoinPrefab: {fileID: 2162369970692588546, guid: 88ee9917543e50e43ac689d8429629ef, type: 3}
 --- !u!212 &2337579197194075860
 SpriteRenderer:
   serializedVersion: 2
@@ -276,3 +281,25 @@ CapsuleCollider2D:
   m_Offset: {x: 0.004283344, y: 0.0379326}
   m_Size: {x: 0.50427896, y: 0.07587107}
   m_Direction: 1
+--- !u!95 &-1007764527595714055
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6528484261614471662}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: aa6266657a624dc4da0810e10daf9664, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
