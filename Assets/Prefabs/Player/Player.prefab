@@ -156,7 +156,6 @@ MonoBehaviour:
   minInterval: 0.2
   maxInterval: 2
   distanceCheckEvery: 0.1
-  chasingRange: 3
 --- !u!82 &5678002032000242459
 AudioSource:
   m_ObjectHideFlags: 0
@@ -339,8 +338,8 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000dfa9ae09
-  m_LightCookieSprite: {fileID: 21300000, guid: 14bf1b860c925914881d35bd9be5fa90, type: 3}
+  m_ApplyToSortingLayers: 0000000023510e366d601ef0dfa9ae0943f82a95
+  m_LightCookieSprite: {fileID: 21300000, guid: f4ac657e4e4f3c949bfff21dbcf05071, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 1
   m_AlphaBlendOnOverlap: 0
@@ -355,8 +354,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0014305115, y: 0.6766319, z: 0}
-    m_Extent: {x: 1.31464, y: 1.8353462, z: 0}
+    m_Center: {x: 0, y: -0.107975006, z: 0}
+    m_Extent: {x: 6.060997, y: 6.060997, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360.00003
   m_PointLightInnerRadius: 0
@@ -493,7 +492,7 @@ Transform:
   m_GameObject: {fileID: 2461914488310165757}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 1, w: 0}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -0.34, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -519,8 +518,8 @@ MonoBehaviour:
   m_Intensity: 1
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
-  m_ApplyToSortingLayers: 00000000dfa9ae09
-  m_LightCookieSprite: {fileID: 21300000, guid: 6e1e5c5dfe55570439bd551786b4a52b, type: 3}
+  m_ApplyToSortingLayers: 0000000023510e366d601ef0dfa9ae0943f82a95
+  m_LightCookieSprite: {fileID: 21300000, guid: 243af02ffd78d7d4e8a5a02e556bf074, type: 3}
   m_DeprecatedPointLightCookieSprite: {fileID: 0}
   m_LightOrder: 1
   m_AlphaBlendOnOverlap: 0
@@ -535,8 +534,8 @@ MonoBehaviour:
   m_ShadowVolumeIntensityEnabled: 0
   m_ShadowVolumeIntensity: 0.75
   m_LocalBounds:
-    m_Center: {x: 0.0014305115, y: -0.0014305115, z: 0}
-    m_Extent: {x: 2.5105476, y: 2.5105476, z: 0}
+    m_Center: {x: 0, y: -0.107975006, z: 0}
+    m_Extent: {x: 6.060997, y: 6.060997, z: 0}
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360.00003
   m_PointLightInnerRadius: 0
@@ -888,7 +887,7 @@ SpriteRenderer:
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!114 &4587804244186199299
 MonoBehaviour:
   m_ObjectHideFlags: 0
