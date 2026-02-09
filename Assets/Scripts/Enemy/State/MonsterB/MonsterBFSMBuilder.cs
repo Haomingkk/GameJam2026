@@ -50,7 +50,7 @@ namespace GameJam26.Enemy
 
             // 追逐状态 -> 待机状态
             fsm.AddTransition(chaseState, idleState, new PredTransition<MonsterBContext>(
-                context => !context.considerPlayerAsEnemy || (context.target == null && (context.currentTime - context.lastSeePlayerTime) >= context.Config.lostTargetTimeout),
+                context => !context.considerPlayerAsEnemy || ((context.currentTime - context.lastSeePlayerTime) >= context.Config.lostTargetTimeout),
                 "Lose Target"
                 ));
 
