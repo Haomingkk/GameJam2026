@@ -14,10 +14,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::GameJam26.Enemy.MonsterAConfig
   patrolSpeed: 2
   patrolMoveStopDistance: 0.2
+  patrolChangeDirectionInterval: 3
+  directionCount: 4
   chaseSpeed: 2
-  senseDistance: 8
+  senseDistance: 6
   stopDistance: 0.1
   lostTargetTimeout: 2
+  idleAfterLostTargetTimeout: 2
   doorBreakDuration: 3
   maskBTriggerMonsterADistance: 15
   knockbackDistance: 5

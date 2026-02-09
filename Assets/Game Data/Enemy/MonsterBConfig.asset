@@ -17,7 +17,7 @@ MonoBehaviour:
   patrolRadius: 5
   patrolMoveStopDistance: 0.2
   chaseSpeed: 0.8
-  senseDistance: 8
+  senseDistance: 6
   stopDistance: 0.1
   lostTargetTimeout: 2
   doorBreakDuration: 3
