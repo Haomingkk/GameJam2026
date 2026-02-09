@@ -87,7 +87,7 @@ namespace GameJam26.Enemy
             _context.hasLineOfSight = see;
             _context.considerPlayerAsEnemy = PlayerController.instance.GetCurrentMaskState() != MaskState.MaskA;
 
-            if (see)
+            if (see && _context.considerPlayerAsEnemy)
             {
                 _context.target = _chaseTarget;
                 _context.lastSeePlayerTime = Time.time;

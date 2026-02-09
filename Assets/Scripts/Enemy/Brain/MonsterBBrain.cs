@@ -78,7 +78,7 @@ namespace GameJam26.Enemy
             }
             _context.hasLineOfSight = see;
             _context.considerPlayerAsEnemy = PlayerController.instance.GetCurrentMaskState() != MaskState.MaskB;
-            if (see)
+            if (see && _context.considerPlayerAsEnemy)
             {
                 _context.target = _chaseTarget;
                 _context.lastSeePlayerTime = Time.time;
@@ -137,10 +137,11 @@ namespace GameJam26.Enemy
             {
                 int maskLayer = ~(LayerMask.GetMask("Monster"));
                 RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance, maskLayer);
-                Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
+                
                 if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
                 {
-                    //Debug.Log("MonsterBBrain: Player sensed!");
+                    Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
+                    Debug.Log("MonsterBBrain: Player sensed!");
                     return true;
                 }
             }
