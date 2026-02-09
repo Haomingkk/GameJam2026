@@ -9,6 +9,7 @@ namespace GameJam26.Enemy
         public void OnEnter(MonsterBContext context)
         {
             context.Motor.Stop();
+            context.target = null;
             context.patrolIdleEndTime = context.currentTime + context.Config.patrolIdleDuration;
             context.animationDriver.EnterIdle(Vector2.zero);
         }

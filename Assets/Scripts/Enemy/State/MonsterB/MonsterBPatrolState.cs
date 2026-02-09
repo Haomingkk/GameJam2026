@@ -12,6 +12,8 @@ namespace GameJam26.Enemy
         {
             Debug.Log("MonsterB Entering Patrol State");
 
+            context.target = null;
+
             context.animationDriver.EnterMove(Vector2.zero);
 
             context.patrolTargetPos = PickRandomNavPointNear(context, context.spawnPos, context.Config.patrolRadius);
