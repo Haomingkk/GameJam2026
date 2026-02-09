@@ -9,6 +9,7 @@ namespace GameJam26.Enemy
 
         public void OnEnter(MonsterAContext context)
         {
+            context.target = null;
             context.Motor.Stop();
             context.AnimDriver.EnterMove(Vector2.zero);
             context.Motor.MoveTowards(context.spawnPos, context.Config.patrolSpeed, 0f);
@@ -17,7 +18,7 @@ namespace GameJam26.Enemy
         public void Tick(MonsterAContext context, float deltaTime)
         {
             Vector2 currentDir = context.Motor.GetCurrentVelocity();
-            // ��Ұ��Χ��ʾ
+            // 视野范围显示
             float degreeFromRight = Mathf.Atan2(currentDir.y, currentDir.x) * Mathf.Rad2Deg;
             float z = degreeFromRight - 90f;
             context.rangeVisual.rotation = Quaternion.Euler(0f, 0f, z);
@@ -39,7 +40,7 @@ namespace GameJam26.Enemy
                     context.currentDirection = currentDir.y > 0 ? FaceDirection.Up : FaceDirection.Down;
                 }
             }
-
+            // 更新动画朝向
             if (currentDir.sqrMagnitude > 0.01f)
             {
                 currentDir.y = 0;

@@ -146,21 +146,33 @@ namespace GameJam26.Enemy
 
         private bool _SensePlayer()
         {
+            Debug.Log("Current State: " + _fsm.Current.Name);
             if (_fsm.Current.Name == "Chase" || _fsm.Current.Name == "Special Chase")
             {
                 int maskLayer = ~(LayerMask.GetMask("Monster"));
                 RaycastHit2D hit = Physics2D.Raycast(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized, _context.Config.senseDistance, maskLayer);
-                Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
+
                 if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
                 {
+                    //Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
                     return true;
                 }
             }
             else if (_fsm.Current.Name == "Patrol" || _fsm.Current.Name == "Idle" || _fsm.Current.Name == "ReturnToSpawnPos")
             {
+                //Debug.Log("Patrol/Idle/ReturnToSpawnPos state sensing player...");
+                
                 Vector2 playerDirection = (_chaseTarget.position - _context.Root.position).normalized;
                 Vector2 monsterForward = MonsterAContext.DirVec[(int)_context.currentDirection];
+                Debug.Log("monsterForward: " + monsterForward);
+                Debug.DrawRay(_context.Root.position, monsterForward * _context.Config.senseDistance, Color.blue);
+                //Debug.DrawRay(_context.Root.position, playerDirection * _context.Config.senseDistance, Color.blue);
                 bool lessThan45Deg = Vector2.Dot(monsterForward, playerDirection) >= Consts.Cos45;
+                if (_fsm.Current.Name == "ReturnToSpawnPos")
+                {
+                    Debug.Log("ReturnToSpawnPos state sensing player...");
+                    Debug.Log("Dot Product: " + Vector2.Dot(monsterForward, playerDirection) + ", lessThan45Deg: " + lessThan45Deg);
+                }
                 // 如果和当前面朝方向夹角小于45度，则进行视线检测
                 if (lessThan45Deg)
                 {
@@ -169,12 +181,16 @@ namespace GameJam26.Enemy
                     Debug.DrawRay(_context.Root.position, (_chaseTarget.position - _context.Root.position).normalized * _context.Config.senseDistance, Color.red);
                     if (hit.collider != null && (hit.transform.CompareTag(_chaseTarget.tag)))
                     {
+                        if (_fsm.Current.Name == "ReturnToSpawnPos")
+                        {
+                            Debug.Log("ReturnToSpawnPos state detected player!");
+                        }
                         return true;
                     }
                 }
             }
 
-                return false;
+            return false;
         }
     }
 }
