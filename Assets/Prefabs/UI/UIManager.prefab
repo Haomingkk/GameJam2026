@@ -25,7 +25,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5837603100399482232}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -69,3 +69,15 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 208a97a965c481041b43fdae6c3ff1ec, type: 3}
   - {fileID: 21300000, guid: ca812573cd853ee499199e73735b7519, type: 3}
   - {fileID: 21300000, guid: b648b8c770c3a5c4293b9d5d03179f61, type: 3}
+  _scareFaceUI: {fileID: 0}
+  _scareFaceTime: 0.5
+  _deathInfoUI: {fileID: 0}
+  _delayDeathBeforeShow: 0.5
+  _startScale: 0.8
+  _endScale: 1
+  _deathInfoShowTime: 2
+  _escapeInfoImage: {fileID: 0}
+  _questionMarkImage: {fileID: 0}
+  _delayEscapeBeforeShow: 0.5
+  _delayQuestionMark: 1.5
+  _escapeInfoShowTime: 1.5

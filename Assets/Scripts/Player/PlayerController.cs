@@ -30,6 +30,7 @@ namespace GameJam2026.GamePlay
         [SerializeField] private float _interactiveFreezeTime = 2.0f;
         [SerializeField] private float _damagedFreezeTime = 1.0f;
         [SerializeField] private float _dieAnimationLength = 2.0f;
+        [SerializeField] private float _escapeAnimationLength = 3.0f;
         [SerializeField] private float _watchingModifier = 0.8f;
 
         [Header("Player Status")]
@@ -122,6 +123,9 @@ namespace GameJam2026.GamePlay
                _UpdateFacing(_moveInput);
         }
         #endregion
+        public int GetPlayerCoins() {
+            return _coin;
+        }
        
         public void OnMove(InputValue value)
         {
@@ -158,7 +162,9 @@ namespace GameJam2026.GamePlay
         public void OnCoinCollected(int amount) {
             _UpdateCoin(amount);
         }
-
+        public void OnPlayerEscaped() {
+            StartCoroutine(_EscapeRoutine());
+        }
         public MaskState GetCurrentMaskState() {
             return maskState;
         }
@@ -242,7 +248,7 @@ namespace GameJam2026.GamePlay
             if (kb.eKey.wasPressedThisFrame || kb.spaceKey.wasPressedThisFrame) {
                 _TryInteractive();
             }
-            if (kb.pKey.wasPressedThisFrame) { OnPlayerDamaged(Vector2.left); }
+            //if (kb.pKey.wasPressedThisFrame) { OnPlayerDamaged(Vector2.left); }
         }
         private void _ToggleMask(MaskState target)
         {
@@ -362,8 +368,9 @@ namespace GameJam2026.GamePlay
             //if treasure box, startloot
             if (comp.TryGetComponent<Chest>(out var chest))
             {
+                Debug.Log("get the chest!");
                 _lootCoroutine=StartCoroutine(_OnLootRountine());
-                _animator.SetTrigger("Interactive");
+                _animator.SetTrigger("Loot");
             }
             else {
                 _interactiveRange.GetInteractable()?.Interact();
@@ -419,7 +426,7 @@ namespace GameJam2026.GamePlay
             _playerState = PlayerState.TakeDamage;
             _rb2D.AddForce(direction * _knockbackForce, ForceMode2D.Impulse);
 
-            Debug.Log($"Player Knock Back!{direction*_knockbackForce}");
+            //Debug.Log($"Player Knock Back!{direction*_knockbackForce}");
             yield return new WaitForSeconds(_knockbackTime);
 
             _rb2D.linearVelocity= Vector2.zero;
@@ -427,9 +434,18 @@ namespace GameJam2026.GamePlay
             _playerState = PlayerState.Idle;
             _knockbackRoutine = null;
         }
+        private IEnumerator _EscapeRoutine() {
+            _isPlayerinControl = false;
+            _isAllowToMove = false;
+            _playerState = PlayerState.Escape;
+            //TODO: Play success sound effect here
+            UIManager.instance.ShowEscapeInfo();
+            yield return new WaitForSeconds(_escapeAnimationLength);
+            SceneManager.LoadScene(0);
+        }
     }
     
 
     public enum MaskState { MaskA,InvalidMaskA,MaskB,MaskD,None}
-    public enum PlayerState { Idle,Move,Interact,TakeDamage,Die}
+    public enum PlayerState { Idle,Move,Interact,TakeDamage,Die,Escape}
 }
