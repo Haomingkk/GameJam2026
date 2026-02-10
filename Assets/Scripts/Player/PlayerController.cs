@@ -151,7 +151,7 @@ namespace GameJam2026.GamePlay
             
         }
         public void OnPlayerDamaged(Vector2 monsterdirection) {
-            if (!_isInvicible) {
+            if (!_isInvicible&&_playerState!=PlayerState.Escape&&_playerState!=PlayerState.Die) {
                 
                 _UpdateHealth(-1);
                 Vector2 knockDir = monsterdirection.normalized;
@@ -226,7 +226,7 @@ namespace GameJam2026.GamePlay
                 StopCoroutine(_knockbackRoutine);
             else
             {
-                Debug.Log("Start Knock Back!");
+                //Debug.Log("Start Knock Back!");
                 _InterruptLootCoroutine();
                 _knockbackRoutine = StartCoroutine(_KnockbackRoutine(direction));
             }
