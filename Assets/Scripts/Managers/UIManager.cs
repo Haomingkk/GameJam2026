@@ -21,6 +21,7 @@ namespace GameJam2026.UI {
         [Header("UI Effect")]
         [SerializeField] Image _scareFaceUI;
         [SerializeField] private float _scareFaceTime = 0.5f;
+
         [Header("Death Info Setting")]
         [SerializeField] Image _deathInfoUI;
         [SerializeField] private float _delayDeathBeforeShow = 0.5f;
@@ -28,6 +29,12 @@ namespace GameJam2026.UI {
         [SerializeField] private float _endScale = 1.0f;
         [SerializeField] private float _deathInfoShowTime=2f;
 
+        [Header("Escape Info Setting")]
+        [SerializeField] Image _escapeInfoImage;
+        [SerializeField] Image _questionMarkImage;
+        [SerializeField] private float _delayEscapeBeforeShow = 0.5f;
+        [SerializeField] private float _delayQuestionMark = 1.0f;
+        [SerializeField] private float _escapeInfoShowTime = 1.0f;
         private float _maxBarWidth;
         private void Awake()
         {
@@ -134,36 +141,70 @@ namespace GameJam2026.UI {
         }
         public void ShowDeathInfo()
         {
-            
             StartCoroutine(DeathInfoAnimate());
+        }
+        public void ShowEscapeInfo() {
+
+            StartCoroutine(EscapeInfoAnimate());
+            StartCoroutine(QuestionMarkAnimate());
+        }
+        private void _LerpImage(float t, float maxTime, Image image) {
+            float p = t / maxTime;
+            float eased = p * p * (3f - 2f * p);
+            
+            image.transform.localScale= Vector3.one * Mathf.Lerp(_startScale, _endScale, eased);
+            Color c = image.color;
+            c.a = Mathf.Lerp(0f, 1f, eased);
+            image.color = c;
         }
         IEnumerator DeathInfoAnimate()
         {
             yield return new WaitForSeconds(_delayDeathBeforeShow);
 
             float t = 0f;
-            Color c = _deathInfoUI.color;
+           
             _deathInfoUI.enabled = true;
             while (t < _deathInfoShowTime)
             {
                 t += Time.deltaTime;
-                float p = t /_deathInfoShowTime;
-
-                
-                float eased = p * p * (3f - 2f * p);
-
-                // Scale
-                _deathInfoUI.transform.localScale = Vector3.one * Mathf.Lerp(_startScale, _endScale, eased);
-
-                // Fade
-                c.a = Mathf.Lerp(0f, 1f, eased);
-                _deathInfoUI.color = c;
+                _LerpImage(t, _deathInfoShowTime, _deathInfoUI);
 
                 yield return null;
             }
 
             _deathInfoUI.transform.localScale = Vector3.one * _endScale;
             _deathInfoUI.color = Color.white;
+        }
+        IEnumerator EscapeInfoAnimate() {
+            yield return new WaitForSeconds(_delayEscapeBeforeShow);
+            float t = 0f;
+            
+            _escapeInfoImage.enabled = true;
+
+            while (t <_escapeInfoShowTime) {
+                t += Time.deltaTime;
+                _LerpImage(t, _escapeInfoShowTime, _escapeInfoImage);
+
+                yield return null;
+            }
+
+            _escapeInfoImage.transform.localScale = Vector3.one * _endScale;
+            _escapeInfoImage.color = Color.white;
+        }
+        IEnumerator QuestionMarkAnimate() {
+            yield return new WaitForSeconds(_delayQuestionMark);
+            float t = 0f;
+            _questionMarkImage.enabled = true;
+            while (t < _escapeInfoShowTime)
+            {
+                t += Time.deltaTime;
+                _LerpImage(t, _escapeInfoShowTime, _questionMarkImage);
+
+                yield return null;
+            }
+
+            _questionMarkImage.transform.localScale = Vector3.one * _endScale;
+            _questionMarkImage.color = Color.white;
         }
 
     }

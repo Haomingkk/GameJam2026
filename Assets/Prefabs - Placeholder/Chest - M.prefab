@@ -152,7 +152,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameJam26.Chest
   isOpen: 0
-  coins: 5
+  coins: 20
   _chestOpenSprite: {fileID: 21300000, guid: 0b0ac659ad4851c4fa55c103d9919ca9, type: 3}
   _spawnRadius: {x: 0.8, y: 0.8}
   _spawnPosOffsite: 0

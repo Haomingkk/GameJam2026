@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 2233231406353984972}
   - component: {fileID: 276598589493214177}
   - component: {fileID: 5678002032000242459}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerAudio
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -264,7 +264,7 @@ GameObject:
   - component: {fileID: 7516634172413055503}
   m_Layer: 9
   m_Name: EnergyCollectRange
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -383,7 +383,7 @@ GameObject:
   - component: {fileID: 2094067870738064142}
   m_Layer: 9
   m_Name: TriangleRange
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -563,7 +563,7 @@ GameObject:
   - component: {fileID: 8671119613323200868}
   m_Layer: 9
   m_Name: CircleRange
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -727,7 +727,7 @@ GameObject:
   - component: {fileID: 6792883805909987697}
   m_Layer: 9
   m_Name: PlayerFeet
-  m_TagString: Untagged
+  m_TagString: PlayerFeet
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -781,8 +781,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.004930892, y: -0.93295085}
-  m_Size: {x: 0.4867943, y: 0.21409824}
+  m_Offset: {x: -0.00014617339, y: -0.9411535}
+  m_Size: {x: 0.27981383, y: 0.14793207}
   m_Direction: 1
 --- !u!1 &5586735360555997078
 GameObject:
@@ -901,10 +901,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::GameJam2026.GamePlay.PlayerController
   watchingPlayerNum: 0
-  _walkSpeed: 3
+  _walkSpeed: 2.4
   _interactiveFreezeTime: 1
   _damagedFreezeTime: 1
-  _dieAnimationLength: 3.5
+  _dieAnimationLength: 3
+  _escapeAnimationLength: 5
   _watchingModifier: 0.5
   _maxHealth: 3
   _maxEnergy: 10
@@ -1016,9 +1017,9 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
-  m_Size: {x: 1.1, y: 1.1}
-  m_Direction: 1
+  m_Offset: {x: 0, y: 0.5}
+  m_Size: {x: 0.4, y: 0.9}
+  m_Direction: 0
 --- !u!95 &5846068297553584183
 Animator:
   serializedVersion: 7
@@ -1145,7 +1146,7 @@ GameObject:
   - component: {fileID: 1479292765033449475}
   m_Layer: 9
   m_Name: InteractiveArea
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
