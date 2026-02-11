@@ -21,7 +21,7 @@ TagManager:
   - Monster
   - Player
   - UnCollidable
-  - 
+  - MinimapIcon
   - 
   - 
   - 
@@ -57,6 +57,9 @@ TagManager:
     locked: 0
   - name: FrontWall
     uniqueID: 2502621251
+    locked: 0
+  - name: MiniMap
+    uniqueID: 4014769919
     locked: 0
   m_RenderingLayers:
   - Default
