@@ -43,6 +43,9 @@ TagManager:
   - 
   - 
   m_SortingLayers:
+  - name: MiniMap
+    uniqueID: 4014769919
+    locked: 0
   - name: Default
     uniqueID: 0
     locked: 0
@@ -57,9 +60,6 @@ TagManager:
     locked: 0
   - name: FrontWall
     uniqueID: 2502621251
-    locked: 0
-  - name: MiniMap
-    uniqueID: 4014769919
     locked: 0
   m_RenderingLayers:
   - Default
